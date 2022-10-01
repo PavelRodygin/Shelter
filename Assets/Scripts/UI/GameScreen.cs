@@ -11,6 +11,7 @@ namespace UI
         [SerializeField] public Button closeButton;
         [SerializeField] public Button interactButton;
         [SerializeField] public Button repairButton;
+        [SerializeField] public Joystick walkJoystick;
 
 
         private void Start()

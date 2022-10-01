@@ -87,6 +87,7 @@ namespace PlayerScripts
                 Debug.Log(_currentInteractable.PointToLook.position);
             }
         }
+        
         private void OnTriggerExit(Collider other)
         {
             if (other.GetComponentInParent<IOpenClosable>() != null) 

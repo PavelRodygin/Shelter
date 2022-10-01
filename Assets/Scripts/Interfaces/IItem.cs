@@ -2,8 +2,9 @@ using UnityEngine;
 
 namespace Interfaces
 {
-    public class IItem : MonoBehaviour
+    public interface IItem
     {
-        
+        void takeItem();
+        void throwItem();
     }
 }

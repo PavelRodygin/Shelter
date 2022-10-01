@@ -16,10 +16,10 @@ public class Level : MonoBehaviour
 
     private void Update()
     {
-         // if (_currentBroken || _currentBroken.)
-         // {
-         //     
-         // }
+        // if (_currentBroken || _currentBroken.)
+        // {
+        //     
+        // }
         if (allIsFine)
         {
             MakeSomethingBad();
