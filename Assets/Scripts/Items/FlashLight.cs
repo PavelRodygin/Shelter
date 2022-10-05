@@ -1,20 +1,16 @@
-using System.Buffers;
-using Interfaces;
 using UnityEngine;
 
 namespace Items
 {
-    public class Smartphone : MonoBehaviour, IItem
+    public class FlashLight : MonoBehaviour
     {
-        private Level _level;
+        [SerializeField] private Level level;
         private Rigidbody _rigidbody;
         public Transform Transform => transform;
         
         
-        
         private void Awake()
         {
-            _level = FindObjectOfType<Level>();
             _rigidbody = GetComponent<Rigidbody>();
         }
         
@@ -28,7 +24,8 @@ namespace Items
         public void Throw()
         {
             _rigidbody.isKinematic = false;
-            gameObject.transform.parent = _level.transform;
+            _rigidbody.AddForce(0,0,20, ForceMode.Impulse);
+            gameObject.transform.parent = level.transform;
         }
     }
 }

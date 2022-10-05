@@ -4,7 +4,8 @@ namespace Interfaces
 {
     public interface IItem
     {
-        void takeItem();
-        void throwItem();
+        void Grab(Transform owner);
+        void Throw();
+        public Transform Transform { get; }
     }
 }

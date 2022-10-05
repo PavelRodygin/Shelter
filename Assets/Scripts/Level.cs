@@ -20,10 +20,10 @@ public class Level : MonoBehaviour
         // {
         //     
         // }
-        if (allIsFine)
-        {
-            MakeSomethingBad();
-        }
+        // if (allIsFine)
+        // {
+        //     MakeSomethingBad();
+        // }
     }   
 
     private void MakeSomethingBad()

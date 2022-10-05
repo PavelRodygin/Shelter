@@ -9,6 +9,7 @@ public class HermoHatch : MonoBehaviour, IOpenClosable, IBreakable
     private bool isOpen = false;
     public bool IsOpen { get; private set; }
     public bool IsBroken { get; private set; }
+    private bool _isAnimationCompleted = true;
     private static readonly int Open1 = Animator.StringToHash("IsOpen");
     private static readonly int Broken1 = Animator.StringToHash("IsBroken");
     [SerializeField] private Transform point;
@@ -26,16 +27,27 @@ public class HermoHatch : MonoBehaviour, IOpenClosable, IBreakable
 
     public void Open()
     {
-        _animController.SetBool(Open1, true);
-        IsOpen = true;
-        Debug.Log("Открыли дверь, анимация");
+        if (_isAnimationCompleted)
+        {
+            _animController.SetBool(Open1, true);
+            IsOpen = true;
+            _isAnimationCompleted = false;
+        }
     }
 
     public void Close()
     {
-        _animController.SetBool(Open1, false);
-        IsOpen = false;
-        Debug.Log("Закрыли дверь, анимация");
+        if (_isAnimationCompleted)
+        {
+            _animController.SetBool(Open1, false);
+            IsOpen = false;
+            _isAnimationCompleted = false;
+        }
+    }
+
+    public void IndicateEndOfAnimation()
+    {
+        _isAnimationCompleted = true;
     }
         
     public void Break()
