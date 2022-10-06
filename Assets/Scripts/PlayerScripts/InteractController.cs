@@ -98,7 +98,7 @@ namespace PlayerScripts
                 _gameScreen.openButton.onClick.AddListener(_currentOpenClosable.Open);
                 _gameScreen.closeButton.onClick.AddListener(_currentOpenClosable.Close);
             }
-            else if (other.transform.TryGetComponent(out IInteractable interactable))
+            else if (other.TryGetComponent(out IInteractable interactable))
             {
                 _currentInteractable = interactable;
                 _gameScreen.interactButton.onClick.AddListener(_currentInteractable.Interact);
@@ -113,7 +113,7 @@ namespace PlayerScripts
         
         private void OnTriggerExit(Collider other)
         {
-            if (other.GetComponent<IOpenClosable>() != null) 
+            if (other.GetComponentInParent<IOpenClosable>() != null) 
             {
                 if (_currentOpenClosable != null)
                 {
@@ -127,7 +127,7 @@ namespace PlayerScripts
                     _buttonsShowed = false;  
                 }
             }
-            else if (other.GetComponent<IInteractable>() != null)
+            else if (other.GetComponentInParent<IInteractable>() != null)
             {
                 if (_currentInteractable != null)
                 {
@@ -138,7 +138,7 @@ namespace PlayerScripts
                     _buttonsShowed = false;
                 }
             }
-            else if (other.GetComponent<IItem>() != null)
+            else if (other.GetComponentInParent<IItem>() != null)
             {
                 _gameScreen.grabButton.gameObject.SetActive(true);
                 _gameScreen.grabButton.onClick.RemoveAllListeners();
