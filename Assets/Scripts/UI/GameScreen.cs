@@ -19,16 +19,22 @@ namespace UI
         
 
         private void Awake()
-        { 
-            openButton.onClick.AddListener(() => openButton.gameObject.SetActive(false));
-            closeButton.onClick.AddListener(() => closeButton.gameObject.SetActive(false));
-            interactButton.onClick.AddListener(() => interactButton.gameObject.SetActive(false));
+        {
             getUpButton.gameObject.SetActive(false);
             openButton.gameObject.SetActive(false);
             closeButton.gameObject.SetActive(false);
             interactButton.gameObject.SetActive(false);
             repairButton.gameObject.SetActive(false);
             
+        }
+
+        private void SetDisableButtons()
+        {
+            openButton.onClick.AddListener(() => openButton.gameObject.SetActive(false));
+            closeButton.onClick.AddListener(() => closeButton.gameObject.SetActive(false));
+            interactButton.onClick.AddListener(() => interactButton.gameObject.SetActive(false));
+            grabButton.onClick.AddListener(() => grabButton.gameObject.SetActive(false));
+            throwButton.onClick.AddListener(() => throwButton.gameObject.SetActive(false));
         }
     }
 }

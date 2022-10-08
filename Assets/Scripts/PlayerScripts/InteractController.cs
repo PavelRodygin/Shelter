@@ -15,8 +15,13 @@ namespace PlayerScripts
         private bool _buttonsShowed;
         private IInteractable _currentInteractable;
         private IItem _currentItem;
+        private Pockets _pockets;
 
-        
+
+        private void Awake()
+        {
+            _pockets = gameObject.GetComponent<Pockets>();
+        }
         
         private void Update()
         {
@@ -39,8 +44,8 @@ namespace PlayerScripts
             if(!_buttonsShowed && Vector3.Dot(camera.transform.forward, 
                    _currentOpenClosable.PointToLook.position - transform.position) > 0.8)               
             {
-                bool isOpen = _currentOpenClosable.IsOpen;
-                if (isOpen)
+                
+                if (_currentOpenClosable.IsOpen)
                 {
                     _gameScreen.closeButton.gameObject.SetActive(true);
                     _buttonsShowed = true;
@@ -69,7 +74,7 @@ namespace PlayerScripts
                 _buttonsShowed = false;
             }
             else if(Vector3.Dot(camera.transform.forward, 
-                        _currentOpenClosable.PointToLook.position - transform.position) < 0.8) 
+                        _currentInteractable.PointToLook.position - transform.position) < 0.8) 
             {
                 _buttonsShowed = false;
                 _gameScreen.interactButton.gameObject.SetActive(false);
@@ -103,11 +108,11 @@ namespace PlayerScripts
                 _currentInteractable = interactable;
                 _gameScreen.interactButton.onClick.AddListener(_currentInteractable.Interact);
             }
-            else if (other.transform.TryGetComponent(out IItem item))
+            else if (other.transform.parent.TryGetComponent(out IItem item))
             {   
                 _currentItem = other.GetComponentInChildren<IItem>();
                 _gameScreen.grabButton.gameObject.SetActive(true);
-                _gameScreen.grabButton.onClick.AddListener(() => gameObject.GetComponent<Pockets>().GrabItem(_currentItem)); 
+                _gameScreen.grabButton.onClick.AddListener(() => _pockets.GrabItem(_currentItem)); 
             }
         }
         
@@ -118,9 +123,9 @@ namespace PlayerScripts
                 if (_currentOpenClosable != null)
                 {
                     _gameScreen.openButton.gameObject.SetActive(true);
-                    _gameScreen.closeButton.gameObject.SetActive(true);
-                    _gameScreen.openButton.onClick.RemoveAllListeners();
-                    _gameScreen.closeButton.onClick.RemoveAllListeners();
+                    _gameScreen.closeButton.gameObject.SetActive(true);    //TODO Нельзя ремувать все
+                    _gameScreen.openButton.onClick.RemoveListener(_currentOpenClosable.Open);
+                    _gameScreen.closeButton.onClick.RemoveListener(_currentOpenClosable.Close);
                     _gameScreen.openButton.gameObject.SetActive(false);
                     _gameScreen.closeButton.gameObject.SetActive(false);
                     _currentOpenClosable = null;
@@ -132,7 +137,7 @@ namespace PlayerScripts
                 if (_currentInteractable != null)
                 {
                     _gameScreen.interactButton.gameObject.SetActive(true);
-                    _gameScreen.interactButton.onClick.RemoveAllListeners();
+                    _gameScreen.interactButton.onClick.RemoveListener(_currentInteractable.Interact);
                     _gameScreen.interactButton.gameObject.SetActive(false);
                     _currentInteractable = null;
                     _buttonsShowed = false;
@@ -141,8 +146,9 @@ namespace PlayerScripts
             else if (other.GetComponentInParent<IItem>() != null)
             {
                 _gameScreen.grabButton.gameObject.SetActive(true);
-                _gameScreen.grabButton.onClick.RemoveAllListeners();
+                _gameScreen.grabButton.onClick.RemoveListener(() => _pockets.GrabItem(_currentItem));
                 _gameScreen.grabButton.gameObject.SetActive(false);
+                _currentItem = null;
             }
         }
     }

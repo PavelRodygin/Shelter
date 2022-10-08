@@ -67,15 +67,15 @@ namespace PlayerScripts
             _gameScreen.throwButton.onClick.RemoveListener(() => ThrowItem(_currentItem));
             _currentItem.Throw();
             //_currentItem.Transform.GetComponent<Rigidbody>().AddForce(0,0, throwForce, ForceMode.Impulse);
-            if (_items.Count == 0)
+            if (_items.Count == 1)
             {
                 _gameScreen.switchButton.gameObject.SetActive(false);
                 _gameScreen.throwButton.gameObject.SetActive(false);
             }
             else
             {
-                _index--;
-                _currentItem = _items[0];
+                _index = 0;
+                _currentItem = _items[_index];
             }
         }
     }

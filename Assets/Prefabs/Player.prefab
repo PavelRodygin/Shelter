@@ -303,7 +303,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upBody: {fileID: 3449049173315861285}
   maxWalkSpeed: 10
-  sensivity: 5
+  sensivity: 4
   jumpPower: 3
   gravityAxeleration: 1
   playerCamera: {fileID: 4421087399496209116}

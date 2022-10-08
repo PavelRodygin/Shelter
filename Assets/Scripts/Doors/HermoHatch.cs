@@ -31,7 +31,7 @@ public class HermoHatch : MonoBehaviour, IOpenClosable, IBreakable
         {
             _animController.SetBool(Open1, true);
             IsOpen = true;
-            _isAnimationCompleted = false;
+            //_isAnimationCompleted = false;
         }
     }
 
@@ -41,7 +41,7 @@ public class HermoHatch : MonoBehaviour, IOpenClosable, IBreakable
         {
             _animController.SetBool(Open1, false);
             IsOpen = false;
-            _isAnimationCompleted = false;
+            //_isAnimationCompleted = false;
         }
     }
 

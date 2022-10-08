@@ -9,7 +9,7 @@ namespace PlayerScripts
         [SerializeField] private CapsuleCollider upBody;
         [SerializeField] private float maxWalkSpeed = 10;
         private float _currentWalkSpeed;
-        [SerializeField] private float sensivity;
+        [SerializeField] private float sensivity = 5;
         [SerializeField] private float jumpPower = 2;
         [SerializeField] private float gravityAxeleration = 10;
         [Inject] private GameScreen _gameScreen;
