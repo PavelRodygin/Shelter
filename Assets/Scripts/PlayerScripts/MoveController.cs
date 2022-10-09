@@ -1,3 +1,4 @@
+using DefaultNamespace;
 using UI;
 using UnityEngine;
 using Zenject;
@@ -10,14 +11,13 @@ namespace PlayerScripts
         [SerializeField] private float maxWalkSpeed = 10;
         private float _currentWalkSpeed;
         [SerializeField] private float sensivity = 5;
-        [SerializeField] private float jumpPower = 2;
-        [SerializeField] private float gravityAxeleration = 10;
+        [SerializeField] private float jumpPower = 20;
+        private bool _isGrounded;
         [Inject] private GameScreen _gameScreen;
-        private CharacterController _characterController;
+        private Rigidbody _rigidbody;
         private Joystick _joystick;
         [SerializeField] GameObject playerCamera;
         private Vector3 _moveDirection;
-        private float _gravityForce;
         private int _rightFingerID;
         private float _halfScreenWidth;
         private Vector2 _lookInput;
@@ -27,7 +27,7 @@ namespace PlayerScripts
 
         private void Awake()
         {
-            _characterController = GetComponent<CharacterController>();
+            _rigidbody = GetComponent<Rigidbody>();
             _halfScreenWidth = Screen.width / 2;
             _joystick = _gameScreen.walkJoystick;
             _rightFingerID = -1;
@@ -44,12 +44,11 @@ namespace PlayerScripts
 
         private void FixedUpdate()
         {
-            WalkAndLookAround();
-            Gravity();
             if (_rightFingerID != -1)
             {
                 LookAround();
             }
+            WalkAndLookAround();
         }
         
         private void GetTouchInput()
@@ -100,39 +99,27 @@ namespace PlayerScripts
             _moveDirection = Vector3.zero;
             _moveDirection.x = _joystick.Horizontal;
             _moveDirection.z = _joystick.Vertical;
-            _moveDirection.y = _gravityForce;
-            var transform1 = transform;
-            _moveDirection = transform1.right * _moveDirection.x + transform1.forward * _moveDirection.z +
-                             transform1.up * _moveDirection.y;
-            _characterController.Move(_moveDirection * (_currentWalkSpeed * Time.deltaTime));
-        }
-
-        private void Gravity()
-        {
-            if (!_characterController.isGrounded)
-            {
-                _gravityForce -= gravityAxeleration * Time.deltaTime;
-            }
-            // else
-            // {
-            //     _gravityForce = -1f;
-            // }
+            _moveDirection = transform.right * _moveDirection.x  + transform.forward * _moveDirection.z +
+                             transform.up * _moveDirection.y;
+            transform.position += (_moveDirection * (_currentWalkSpeed * Time.deltaTime));
+            Debug.Log(_moveDirection);    // не толкает
         }
 
         private void Jump()
         {
-            if (_characterController.isGrounded && upBody.enabled)
+            
+            if (_isGrounded && upBody.enabled)
             {
-                _gravityForce = jumpPower;
+                _rigidbody.AddForce(0,-jumpPower, 0);
             }
         }
 
         private void Crouch()
         {
-            if (_characterController.isGrounded)
+            if (_isGrounded)
             {
                 upBody.enabled = false;
-                playerCamera.transform.localPosition = Vector3.zero;
+                playerCamera.transform.localPosition = new Vector3(0,2.6f, 0);
                 _currentWalkSpeed = maxWalkSpeed / 2;
                 _gameScreen.crouchButton.gameObject.SetActive(false);
                 _gameScreen.getUpButton.gameObject.SetActive(true);
@@ -141,13 +128,29 @@ namespace PlayerScripts
         
         private void GetUp()
         {
-            if (_characterController.isGrounded)
+            if (_isGrounded)
             {
                 upBody.enabled = true;
-                playerCamera.transform.localPosition = new Vector3(0,1.6f,0);
+                playerCamera.transform.localPosition = new Vector3(0,4f,0);
                 _currentWalkSpeed = maxWalkSpeed;
                 _gameScreen.getUpButton.gameObject.SetActive(false);
                 _gameScreen.crouchButton.gameObject.SetActive(true);
+            }
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.GetComponent<Floor>() != null)
+            {
+                _isGrounded = true;
+            }
+        }
+
+        private void OnCollisionExit(Collision collision)
+        {
+            if (collision.gameObject.GetComponent<Floor>()!= null)
+            {
+                _isGrounded = false;
             }
         }
     }
