@@ -1,33 +1,36 @@
+using System;
 using DefaultNamespace;
 using UI;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Zenject;
 
 namespace PlayerScripts
 {
     public class MoveController : MonoBehaviour
     {
+        [Inject] private GameScreen _gameScreen;
         [SerializeField] private CapsuleCollider upBody;
         [SerializeField] private float maxWalkSpeed = 10;
-        private float _currentWalkSpeed;
         [SerializeField] private float sensivity = 5;
-        [SerializeField] private float jumpPower = 20;
+        [SerializeField] private float jumpPower = 300;
+        private GameObject _playerBody;
+        private float _currentWalkSpeed;
         private bool _isGrounded;
-        [Inject] private GameScreen _gameScreen;
         private Rigidbody _rigidbody;
         private Joystick _joystick;
-        [SerializeField] GameObject playerCamera;
         private Vector3 _moveDirection;
         private int _rightFingerID;
         private float _halfScreenWidth;
         private Vector2 _lookInput;
         private float _cameraPitch;
-        
+        private Quaternion _currentRotation;
         
 
         private void Awake()
         {
-            _rigidbody = GetComponent<Rigidbody>();
+            _playerBody = transform.parent.gameObject;
+            _rigidbody = GetComponentInParent<Rigidbody>();
             _halfScreenWidth = Screen.width / 2;
             _joystick = _gameScreen.walkJoystick;
             _rightFingerID = -1;
@@ -48,7 +51,7 @@ namespace PlayerScripts
             {
                 LookAround();
             }
-            WalkAndLookAround();
+            Move();
         }
         
         private void GetTouchInput()
@@ -89,25 +92,25 @@ namespace PlayerScripts
 
         private void LookAround()
         {
-            _cameraPitch = Mathf.Clamp(_cameraPitch - _lookInput.y, -90, 90);
-            playerCamera.transform.localRotation = Quaternion.Euler(_cameraPitch, 0, 0);
+            _cameraPitch = Mathf.Clamp(_cameraPitch - _lookInput.y, -90f, 90f);
+            transform.localRotation = Quaternion.Euler(_cameraPitch, 0, 0);
+            Debug.Log(_lookInput.x);   
             transform.Rotate(transform.up,_lookInput.x);
         }
 
-        private void WalkAndLookAround()
+        private void Move()
         {
             _moveDirection = Vector3.zero;
             _moveDirection.x = _joystick.Horizontal;
             _moveDirection.z = _joystick.Vertical;
-            _moveDirection = transform.right * _moveDirection.x  + transform.forward * _moveDirection.z +
-                             transform.up * _moveDirection.y;
-            transform.position += (_moveDirection * (_currentWalkSpeed * Time.deltaTime));
-            Debug.Log(_moveDirection);    // не толкает
+            _moveDirection = _playerBody.transform.right * _moveDirection.x  + _playerBody.transform.forward * _moveDirection.z +
+                             _playerBody.transform.up * _moveDirection.y;
+            _playerBody.transform.position += (_moveDirection * (_currentWalkSpeed * Time.deltaTime));
+           Debug.Log(_moveDirection);    // не мешает
         }
 
         private void Jump()
         {
-            
             if (_isGrounded && upBody.enabled)
             {
                 _rigidbody.AddForce(0,-jumpPower, 0);
@@ -119,7 +122,7 @@ namespace PlayerScripts
             if (_isGrounded)
             {
                 upBody.enabled = false;
-                playerCamera.transform.localPosition = new Vector3(0,2.6f, 0);
+                transform.localPosition = new Vector3(0,2.6f, 0);
                 _currentWalkSpeed = maxWalkSpeed / 2;
                 _gameScreen.crouchButton.gameObject.SetActive(false);
                 _gameScreen.getUpButton.gameObject.SetActive(true);
@@ -131,18 +134,19 @@ namespace PlayerScripts
             if (_isGrounded)
             {
                 upBody.enabled = true;
-                playerCamera.transform.localPosition = new Vector3(0,4f,0);
+                transform.localPosition = new Vector3(0,4f,0);
                 _currentWalkSpeed = maxWalkSpeed;
                 _gameScreen.getUpButton.gameObject.SetActive(false);
                 _gameScreen.crouchButton.gameObject.SetActive(true);
             }
         }
 
-        private void OnCollisionEnter(Collision collision)
+        private void OnTriggerEnter(Collider collision)
         {
             if (collision.gameObject.GetComponent<Floor>() != null)
             {
                 _isGrounded = true;
+                _rigidbody.velocity = Vector3.zero;
             }
         }
 
@@ -150,7 +154,7 @@ namespace PlayerScripts
         {
             if (collision.gameObject.GetComponent<Floor>()!= null)
             {
-                _isGrounded = false;
+                _isGrounded = true;
             }
         }
     }

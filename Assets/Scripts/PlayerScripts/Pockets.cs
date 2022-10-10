@@ -18,13 +18,17 @@ namespace PlayerScripts
         private int _index;
 
 
-        private void Awake()
+        private void Start()
         {
             Initialize();
         }
 
         private void Initialize()
         {
+            if (_currentItem == null)
+            {
+                Debug.Log(_currentItem);
+            }
             _items = new List<IItem>();
             _items.Add(hand);
             _currentItem = gameObject.GetComponentInChildren<Smartphone>();

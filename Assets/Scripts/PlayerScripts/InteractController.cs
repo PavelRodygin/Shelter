@@ -9,7 +9,7 @@ namespace PlayerScripts
 {
     public class InteractController : MonoBehaviour
     {
-        [SerializeField] private new Camera camera;
+        private new Camera _camera;
         [Inject] private GameScreen _gameScreen;
         private IOpenClosable _currentOpenClosable;
         private bool _buttonsShowed;
@@ -21,6 +21,7 @@ namespace PlayerScripts
         private void Awake()
         {
             _pockets = gameObject.GetComponent<Pockets>();
+            _camera = GetComponent<Camera>();
         }
         
         private void Update()
@@ -41,7 +42,7 @@ namespace PlayerScripts
 
         private void OpenClose()
         {
-            if(!_buttonsShowed && Vector3.Dot(camera.transform.forward, 
+            if(!_buttonsShowed && Vector3.Dot(_camera.transform.forward, 
                    _currentOpenClosable.PointToLook.position - transform.position) > 0.8)               
             {
                 
@@ -56,7 +57,7 @@ namespace PlayerScripts
                     _buttonsShowed = true;
                 }
             }
-            else if (Vector3.Dot(camera.transform.forward, 
+            else if (Vector3.Dot(_camera.transform.forward, 
                          _currentOpenClosable.PointToLook.position - transform.position) < 0.8) 
             {
                 _gameScreen.openButton.gameObject.SetActive(false);  
@@ -67,13 +68,13 @@ namespace PlayerScripts
         
         private void Interact()
         {
-            if (Vector3.Dot(camera.transform.forward,
+            if (Vector3.Dot(_camera.transform.forward,
                     _currentInteractable.PointToLook.position - transform.position) > 0.8 )
             {
                 _gameScreen.interactButton.gameObject.SetActive(true);
                 _buttonsShowed = false;
             }
-            else if(Vector3.Dot(camera.transform.forward, 
+            else if(Vector3.Dot(_camera.transform.forward, 
                         _currentInteractable.PointToLook.position - transform.position) < 0.8) 
             {
                 _buttonsShowed = false;
@@ -83,12 +84,12 @@ namespace PlayerScripts
 
         private void FindItem()
         {
-            if(Vector3.Dot(camera.transform.forward, _currentItem.Transform.position - transform.position) > 0.8 && !_buttonsShowed)
+            if(Vector3.Dot(_camera.transform.forward, _currentItem.Transform.position - transform.position) > 0.8 && !_buttonsShowed)
             {
                 _buttonsShowed = true;
                 _gameScreen.grabButton.gameObject.SetActive(true);
             }
-            else if(Vector3.Dot(camera.transform.forward, _currentItem.Transform.position - transform.position) < 0.8)
+            else if(Vector3.Dot(_camera.transform.forward, _currentItem.Transform.position - transform.position) < 0.8)
             {
                 _gameScreen.grabButton.gameObject.SetActive(false);
                 _buttonsShowed = false;
