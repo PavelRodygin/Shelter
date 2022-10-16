@@ -319,6 +319,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bbc74be33ff470ba4253443acdea4b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  smartphone: {fileID: 5643756708896909769}
   hand: {fileID: 285731288007890932}
   handPosition: {fileID: 6520420192406429601}
   throwForce: 30
@@ -438,6 +439,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 08708cc5f1951ff47aecff0e0aa5a6a5, type: 3}
+--- !u!114 &5643756708896909769 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5181978648178924731, guid: 08708cc5f1951ff47aecff0e0aa5a6a5, type: 3}
+  m_PrefabInstance: {fileID: 700504300431488370}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3df0f85b13b647068dac533aeb71e312, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &5643756708896909770 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5181978648178924728, guid: 08708cc5f1951ff47aecff0e0aa5a6a5, type: 3}

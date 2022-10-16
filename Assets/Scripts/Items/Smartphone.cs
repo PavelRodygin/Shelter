@@ -7,7 +7,7 @@ namespace Items
     public class Smartphone : MonoBehaviour, IItem
     {
         private Level _level;
-        private Rigidbody _rigidbody;
+        [SerializeField] private Rigidbody _rigidbody;
         public Transform Transform => transform;
         
         
@@ -15,16 +15,16 @@ namespace Items
         private void Awake()
         {
             _level = FindObjectOfType<Level>();
-            _rigidbody = GetComponent<Rigidbody>();
         }
         
         public void Grab(Transform owner)
         {
             _rigidbody.isKinematic = true;
             gameObject.GetComponentInChildren<SphereCollider>().enabled = false;
-            gameObject.transform.position = owner.position;
-            gameObject.transform.rotation = owner.rotation;
-            gameObject.transform.parent = owner;
+            transform.rotation = owner.rotation;
+            transform.parent = owner;
+            transform.localPosition = Vector3.zero;
+            Debug.Log( owner.position + "- позиция руки, позиция телефона - " + transform.position);
         }
         
         public void Throw()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Interfaces;
 using Items;
@@ -22,12 +23,12 @@ namespace PlayerScripts
         {
             Initialize();
         }
-
+        
         private void Initialize()
         {
             _items = new List<IItem>();
             _items.Add(hand);
-            _currentItem = gameObject.GetComponentInChildren<Smartphone>();
+            _currentItem = hand.GetComponentInChildren<Smartphone>();
             GrabItem(_currentItem);
             _gameScreen.throwButton.gameObject.SetActive(true);
             _gameScreen.throwButton.onClick.AddListener(()=>ThrowItem(_currentItem));
@@ -37,8 +38,7 @@ namespace PlayerScripts
         
         public void SwitchItem()
         {
-            _currentItem.Transform.gameObject.SetActive(false);
-            if (_index != _items.Count)
+            if (_index < _items.Count)
             {
                 _index++;
             }
@@ -46,8 +46,11 @@ namespace PlayerScripts
             {
                 _index = 0;
             }
+            _currentItem.Transform.gameObject.SetActive(false);
             _currentItem = _items[_index];
             _currentItem.Transform.gameObject.SetActive(true);
+            _gameScreen.throwButton.onClick.AddListener(() => ThrowItem(_currentItem));
+            _gameScreen.switchButton.gameObject.SetActive(true);
         }
 
 
@@ -56,27 +59,45 @@ namespace PlayerScripts
             _currentItem.Grab(handPosition);
             _items.Add(_currentItem);
             _gameScreen.grabButton.onClick.RemoveListener(() => GrabItem(_currentItem));
+            _gameScreen.grabButton.gameObject.SetActive(false);
             _gameScreen.throwButton.gameObject.SetActive(true);
             _gameScreen.throwButton.onClick.AddListener(() => ThrowItem(_currentItem));
             _gameScreen.switchButton.gameObject.SetActive(true);
+            Debug.Log("Карманы взяли телефон");
         }
 
         public void ThrowItem(IItem item)
         {
-            _items.Remove(item);
-            _gameScreen.throwButton.onClick.RemoveListener(() => ThrowItem(_currentItem));
-            _currentItem.Throw();
-            //_currentItem.Transform.GetComponent<Rigidbody>().AddForce(0,0, throwForce, ForceMode.Impulse);
-            if (_items.Count == 1)
+            if (_currentItem != hand)
             {
-                _gameScreen.switchButton.gameObject.SetActive(false);
-                _gameScreen.throwButton.gameObject.SetActive(false);
+                if(_items.Count == 2) //осталась только рука
+                {
+                    _gameScreen.switchButton.gameObject.SetActive(false);
+                    _gameScreen.throwButton.onClick.RemoveListener(() => ThrowItem(_currentItem));
+                    _gameScreen.throwButton.gameObject.SetActive(false);
+                    _items.Remove(item);
+                    _currentItem.Throw();
+                    _currentItem = _items[0];
+                    _currentItem.Transform.gameObject.SetActive(true);
+                    GrabItem(_currentItem);
+                    _gameScreen.throwButton.gameObject.SetActive(false);
+                }
+                else
+                {
+                    _items.Remove(item);
+                    _currentItem.Throw();
+                    _currentItem.Transform.gameObject.SetActive(true);
+                    _gameScreen.throwButton.onClick.RemoveListener(() => ThrowItem(_currentItem));
+                    _index--;
+                    SwitchItem();
+                }
+               
             }
             else
             {
-                _index = 0;
-                _currentItem = _items[_index];
+                Debug.Log("Нельзя выбросить руку");
             }
+   
         }
     }
 }

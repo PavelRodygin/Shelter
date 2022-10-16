@@ -113,6 +113,7 @@ namespace PlayerScripts
                 _currentItem = other.GetComponentInChildren<IItem>();
                 _gameScreen.grabButton.gameObject.SetActive(true);
                 _gameScreen.grabButton.onClick.AddListener(() => _pockets.GrabItem(_currentItem)); 
+                Debug.Log("Добавили метод на кнопку");
             }
         }
         
@@ -123,7 +124,7 @@ namespace PlayerScripts
                 if (_currentOpenClosable != null)
                 {
                     _gameScreen.openButton.gameObject.SetActive(true);
-                    _gameScreen.closeButton.gameObject.SetActive(true);    //TODO Нельзя ремувать все
+                    _gameScreen.closeButton.gameObject.SetActive(true);   
                     _gameScreen.openButton.onClick.RemoveListener(_currentOpenClosable.Open);
                     _gameScreen.closeButton.onClick.RemoveListener(_currentOpenClosable.Close);
                     _gameScreen.openButton.gameObject.SetActive(false);

@@ -113,10 +113,10 @@ namespace PlayerScripts
             {
                 _gravityForce -= gravityAxeleration * Time.deltaTime;
             }
-            // else
-            // {
-            //     _gravityForce = -1f;
-            // }
+            else
+            {
+                _gravityForce = -1f;
+            }
         }
 
         private void Jump()
