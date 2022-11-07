@@ -6,12 +6,13 @@ namespace PlayerScripts
 {
     public class MoveController : MonoBehaviour
     {
+        private const float PlayerHeigth = 4.5f;
         [SerializeField] private CapsuleCollider upBody;
         [SerializeField] private float maxWalkSpeed = 10;
         private float _currentWalkSpeed;
         [SerializeField] private float sensivity = 5;
         [SerializeField] private float jumpPower = 2;
-        [SerializeField] private float gravityAxeleration = 10;
+        [SerializeField] private float gravityAxceleration = 10;
         [Inject] private GameScreen _gameScreen;
         private CharacterController _characterController;
         private Joystick _joystick;
@@ -111,7 +112,7 @@ namespace PlayerScripts
         {
             if (!_characterController.isGrounded)
             {
-                _gravityForce -= gravityAxeleration * Time.deltaTime;
+                _gravityForce -= gravityAxceleration * Time.deltaTime;
             }
             else
             {
@@ -132,7 +133,7 @@ namespace PlayerScripts
             if (_characterController.isGrounded)
             {
                 upBody.enabled = false;
-                playerCamera.transform.localPosition = Vector3.zero;
+                playerCamera.transform.localPosition = new Vector3(0,PlayerHeigth/2,0);
                 _currentWalkSpeed = maxWalkSpeed / 2;
                 _gameScreen.crouchButton.gameObject.SetActive(false);
                 _gameScreen.getUpButton.gameObject.SetActive(true);
@@ -141,10 +142,15 @@ namespace PlayerScripts
         
         private void GetUp()
         {
-            if (_characterController.isGrounded)
+            RaycastHit hit;
+            bool wallUpHead = false;
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.up), out hit, PlayerHeigth))
+                //wallUpHead = true;
+            
+            if (_characterController.isGrounded && !wallUpHead)
             {
                 upBody.enabled = true;
-                playerCamera.transform.localPosition = new Vector3(0,1.6f,0);
+                playerCamera.transform.localPosition = new Vector3(0,PlayerHeigth,0);
                 _currentWalkSpeed = maxWalkSpeed;
                 _gameScreen.getUpButton.gameObject.SetActive(false);
                 _gameScreen.crouchButton.gameObject.SetActive(true);

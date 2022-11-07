@@ -41,16 +41,15 @@ namespace PlayerScripts
 
         private void OpenClose()
         {
-            if(!_buttonsShowed && Vector3.Dot(camera.transform.forward, 
-                   _currentOpenClosable.PointToLook.position - transform.position) > 0.8)               
+            if(_buttonsShowed == false && Vector3.Dot(camera.transform.forward, 
+                   _currentOpenClosable.PointToLook.position - transform.position) > 0.8)
             {
-                
-                if (_currentOpenClosable.IsOpen)
+                if (_currentOpenClosable.IsOpen && _currentOpenClosable.IsInteractable )
                 {
                     _gameScreen.closeButton.gameObject.SetActive(true);
                     _buttonsShowed = true;
                 }
-                else 
+                else if (!_currentOpenClosable.IsOpen && _currentOpenClosable.IsInteractable)
                 {
                     _gameScreen.openButton.gameObject.SetActive(true);
                     _buttonsShowed = true;
@@ -109,11 +108,10 @@ namespace PlayerScripts
                 _gameScreen.interactButton.onClick.AddListener(_currentInteractable.Interact);
             }
             else if (other.transform.parent.TryGetComponent(out IItem item))
-            {   
-                _currentItem = other.GetComponentInChildren<IItem>();
+            {
+                _currentItem = item;
                 _gameScreen.grabButton.gameObject.SetActive(true);
                 _gameScreen.grabButton.onClick.AddListener(() => _pockets.GrabItem(_currentItem)); 
-                Debug.Log("Добавили метод на кнопку");
             }
         }
         

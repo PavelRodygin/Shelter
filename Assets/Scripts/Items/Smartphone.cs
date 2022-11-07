@@ -21,16 +21,17 @@ namespace Items
         {
             _rigidbody.isKinematic = true;
             gameObject.GetComponentInChildren<SphereCollider>().enabled = false;
+            gameObject.GetComponentInChildren<MeshCollider>().enabled = false;
             transform.rotation = owner.rotation;
             transform.parent = owner;
             transform.localPosition = Vector3.zero;
-            Debug.Log( owner.position + "- позиция руки, позиция телефона - " + transform.position);
         }
         
         public void Throw()
         {
             _rigidbody.isKinematic = false;
             gameObject.GetComponentInChildren<SphereCollider>().enabled = true;
+            gameObject.GetComponentInChildren<MeshCollider>().enabled = true;
             gameObject.transform.parent = _level.transform;
         }
     }

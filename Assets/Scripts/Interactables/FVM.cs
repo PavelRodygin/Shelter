@@ -35,13 +35,14 @@ namespace Interactables
 
           public void Break()
           {
+               _isWorking = false;
                _isBroken = true;
                _animController.SetBool(Broken1,true);
           }
 
           public void Fix()
           {
-               
+               _isBroken = false;
           }
      }
 }

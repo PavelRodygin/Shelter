@@ -105,6 +105,7 @@ GameObject:
   - component: {fileID: 7676900271035864874}
   - component: {fileID: 6712069380445722767}
   - component: {fileID: 8845906138591308869}
+  - component: {fileID: 2999618294182625333}
   m_Layer: 0
   m_Name: WallLamp
   m_TagString: Untagged
@@ -178,3 +179,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2999618294182625333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7044197937320103312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5467173ba15477fb13fc0d35c8f5b89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  light: {fileID: 454035448006361042}

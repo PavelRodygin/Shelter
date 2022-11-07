@@ -6,8 +6,10 @@ namespace Doors
     public class Door : MonoBehaviour, IOpenClosable
     {
         private Animator _animController;
-        private bool isOpen = false;
+        private bool _isOpen = false;
+        private bool _isInteractable = true;
         public bool IsOpen { get; private set; }
+        public bool IsInteractable { get; }
         private static readonly int Open1 = Animator.StringToHash("IsOpen");
         [SerializeField] private Transform point;
         public Transform PointToLook
