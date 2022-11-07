@@ -1,8 +1,6 @@
-using DefaultNamespace.Interfaces;
 using Interfaces;
 using UI;
 using UnityEngine;
-using UnityEngine.Events;
 using Zenject;
 
 namespace PlayerScripts

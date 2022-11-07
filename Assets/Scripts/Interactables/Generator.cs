@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using DefaultNamespace;
-using DefaultNamespace.Interfaces;
 using Interfaces;
 using UnityEngine;
 
@@ -17,7 +16,6 @@ namespace Interactables
         [SerializeField] private List<Lamp> lamps;
         public Transform PointToLook => point;
         public bool IsWorking => _isWorking;
-
         public bool IsBroken => _isBroken;
 
 

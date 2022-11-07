@@ -7,6 +7,7 @@ namespace DefaultNamespace
         [SerializeField] private GameObject light;
         private Animator _animator;
 
+        
         private void Awake()
         {
             _animator = GetComponent<Animator>();
@@ -17,6 +18,7 @@ namespace DefaultNamespace
         {
             light.gameObject.SetActive(true);
         }
+        
         public void TurnOff()
         {
             light.gameObject.SetActive(false);

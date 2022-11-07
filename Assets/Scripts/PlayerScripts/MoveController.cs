@@ -25,7 +25,6 @@ namespace PlayerScripts
         private float _cameraPitch;
         
         
-
         private void Awake()
         {
             _characterController = GetComponent<CharacterController>();

@@ -11,15 +11,13 @@ namespace PlayerScripts
         public bool IsAlive { get; private set; }
         public event Action SurvivalStarted;
         private bool _survivalStarted;
-
         
         
         private void Die()
         {
             _isAlive = false;
         }
-
-
+        
         private void OnTriggerEnter(Collider other)
         {
             if (!_survivalStarted && other.GetComponent<ShelterZone>())

@@ -1,27 +1,23 @@
-using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using DefaultNamespace.UI;
 using Interfaces;
 using PlayerScripts;
 using UI;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 
 public class Level : MonoBehaviour
 {
     [Inject] private GameScreen _gameScreen;
     [SerializeField] private Player _player;
-    [SerializeField] private List<IBreakable> breakables;
+    [SerializeField] private List<IBreakable> breakables;  //TODO
     [SerializeField] private float breakingTime = 20000f;
     [SerializeField] private float breakTimeMultiplier = 0.9f;
     private bool surviveStarted;
     private bool allIsFine = true;
     private IBreakable _currentBroken;
 
-
-
+    
     private void Awake()
     {
         _player.SurvivalStarted += StartSurvive;

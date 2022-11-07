@@ -1,4 +1,3 @@
-using DefaultNamespace.Interfaces;
 using Interfaces;
 using UnityEngine;
 
@@ -16,9 +15,7 @@ namespace Interactables
           {
                get { return viewPoint; }
           }
-
           public bool IsBroken => _isBroken;
-
           public bool IsWorking => _isWorking;
 
 

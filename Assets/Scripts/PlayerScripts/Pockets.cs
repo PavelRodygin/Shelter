@@ -16,8 +16,7 @@ namespace PlayerScripts
         [SerializeField] private Transform handPosition;
         [SerializeField] private float throwForce = 5;
 
-
-
+        
         private void Awake()
         {
             Initialize();
@@ -33,8 +32,6 @@ namespace PlayerScripts
             _gameScreen.throwButton.onClick.AddListener(() => ThrowItem(_currentItem));
         }
         
-
-
         public void GrabItem(IItem item)
         {
             if (item != null)

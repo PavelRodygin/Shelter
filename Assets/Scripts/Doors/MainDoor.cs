@@ -24,7 +24,6 @@ namespace Doors
         }
         
         
-        
         private void Awake()
         {
             _animController = GetComponentInParent<Animator>();

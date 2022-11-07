@@ -12,11 +12,8 @@ namespace Doors
         public bool IsInteractable { get; }
         private static readonly int Open1 = Animator.StringToHash("IsOpen");
         [SerializeField] private Transform point;
-        public Transform PointToLook
-        {
-            get { return point; }
-        }
-        
+        public Transform PointToLook => point;
+    
         
         
         private void Awake()
