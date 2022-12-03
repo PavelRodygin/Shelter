@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
@@ -51,17 +52,22 @@ namespace UI
             await UniTask.Delay(2000);
             messageText.gameObject.SetActive(false);
         }
-
-        public async void ShowGameException(string message)
+        
+        public async UniTask ShowGameMessage(Dictionary<string, int> messages)
         {
-            messageText.gameObject.SetActive(true);
-            messageText.text = message;
-            messageText.DOFade(1f, 2f);
-            messageText.DOColor(Color.red, 0f);
-            await UniTask.Delay(6000);
-            messageText.DOFade(0f, 2f);
-            await UniTask.Delay(2000);
-            messageText.gameObject.SetActive(false);
+            int fadeTime = 1000;
+            foreach (var message in messages)
+            {
+                messageText.gameObject.SetActive(true);
+                messageText.text = message.Key;
+                messageText.DOColor(Color.white, 0.5f); 
+                messageText.DOFade(1f, 0.5f);
+                await UniTask.Delay(fadeTime);
+                await UniTask.Delay(message.Value - 2*fadeTime);
+                messageText.DOFade(0f, 0.5f);
+                await UniTask.Delay(fadeTime);
+                messageText.gameObject.SetActive(false);
+            }
         }
     }
 }
