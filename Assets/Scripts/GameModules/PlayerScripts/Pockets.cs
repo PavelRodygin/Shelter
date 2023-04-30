@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
 using Interfaces;
-using Items;
-using UI;
+using UIModules.GameScreen.Scripts;
 using UnityEngine;
+using UnityEngine.XR;
 using Zenject;
 
-namespace PlayerScripts
+namespace GameModules.PlayerScripts
 {
     public class Pockets : MonoBehaviour
     {
