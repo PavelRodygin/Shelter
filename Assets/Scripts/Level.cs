@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace.UI;
 using Interfaces;
@@ -9,7 +8,7 @@ public class Level : MonoBehaviour
 {
     [Inject] private UIManager uiManager;
     [SerializeField] private List<IBreakable> breakables;
-    private bool allIsFine = true;
+    private bool _allIsFine = true;
     private IBreakable _currentBroken;
     
 
