@@ -7,7 +7,7 @@ using Button = UnityEngine.UI.Button;
 
 namespace UIModules.GameScreen.Scripts
 {
-    public class GameScreen : MonoBehaviour
+    public class GameScreenUIView : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI messageText;
         [SerializeField] public Button openButton;
@@ -22,7 +22,7 @@ namespace UIModules.GameScreen.Scripts
         [SerializeField] public Joystick walkJoystick;
 
 
-        private void Awake()
+        private void OnEnable()
         {
             SetDisableButtons();
             getUpButton.gameObject.SetActive(false);

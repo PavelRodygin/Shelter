@@ -65,7 +65,7 @@ namespace UIModules.MainMenu.Scripts
             Application.Quit();
         }
         
-        public void Dispose()
+        public void Dispose()   
         {
             _mainMenuUIView.startGameButton.onClick.RemoveListener(StartGameButtonClicked);
             _mainMenuUIView.Dispose();
