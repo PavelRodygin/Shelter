@@ -7,6 +7,13 @@
       "dependencies": {},
       "hash": "305695ad5d194dda0d6b00777c2459202a1ef4ea"
     },
+    "com.demigiant.dotween": {
+      "version": "https://github.com/yoshida190/dotween.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "9f1c3648a838f759c70b08bb66468532951e0ea7"
+    },
     "com.unity.collab-proxy": {
       "version": "1.17.7",
       "depth": 0,

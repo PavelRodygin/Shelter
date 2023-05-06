@@ -55,17 +55,16 @@ namespace UIModules.GameScreen.Scripts
         
         public async UniTask ShowGameMessage(Dictionary<string, int> messages)
         {
-            int fadeTime = 1000;
+            float fadeTime = 0.5f;
+            int showTime = 2000;
             foreach (var message in messages)
             {
                 messageText.gameObject.SetActive(true);
                 messageText.text = message.Key;
-                messageText.DOColor(Color.white, 0.5f); 
-                messageText.DOFade(1f, 0.5f);
-                await UniTask.Delay(fadeTime);
-                await UniTask.Delay(message.Value - 2*fadeTime);
-                messageText.DOFade(0f, 0.5f);
-                await UniTask.Delay(fadeTime);
+                messageText.DOColor(Color.white, fadeTime); 
+                await messageText.DOFade(1f, fadeTime);
+                await UniTask.Delay(showTime);
+                await messageText.DOFade(0f, fadeTime);
                 messageText.gameObject.SetActive(false);
             }
         }

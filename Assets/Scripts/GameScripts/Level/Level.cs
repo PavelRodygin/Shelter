@@ -35,7 +35,7 @@ namespace GameScripts.Level
 
         private async void BreakSomething()
         {
-            while (playerMoveController.IsAlive)
+            while (playerMoveController.isAlive)
             {
                 int index = Random.Range(0, breakables.Count); 
                 //breakables[index]Break();

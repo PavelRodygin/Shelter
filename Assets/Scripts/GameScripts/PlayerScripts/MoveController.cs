@@ -6,24 +6,24 @@ namespace GameScripts.PlayerScripts
 {
     public class MoveController : MonoBehaviour
     {
-        private const float PlayerHeigth = 4.5f;
+        [Inject] private GameScreenUIView _gameScreenUIView;
+        [SerializeField] GameObject playerCamera;
         [SerializeField] private CapsuleCollider upBody;
         [SerializeField] private float maxWalkSpeed = 10;
-        private float _currentWalkSpeed;
         [SerializeField] private float sensivity = 5;
         [SerializeField] private float jumpPower = 2;
         [SerializeField] private float gravityAxceleration = 10;
-        [Inject] private GameScreenUIView _gameScreenUIView;
+        private const float PlayerHeight = 4.5f;
+        private float _currentWalkSpeed;
         private CharacterController _characterController;
         private Joystick _joystick;
-        [SerializeField] GameObject playerCamera;
         private Vector3 _moveDirection;
         private float _gravityForce;
         private int _rightFingerID;
         private float _halfScreenWidth;
         private Vector2 _lookInput;
         private float _cameraPitch;
-        public bool IsAlive;
+        public bool isAlive;
         
         private void Awake()
         {
@@ -132,7 +132,7 @@ namespace GameScripts.PlayerScripts
             if (_characterController.isGrounded)
             {
                 upBody.enabled = false;
-                playerCamera.transform.localPosition = new Vector3(0,PlayerHeigth/2,0);
+                playerCamera.transform.localPosition = new Vector3(0,PlayerHeight/2,0);
                 _currentWalkSpeed = maxWalkSpeed / 2;
                 _gameScreenUIView.crouchButton.gameObject.SetActive(false);
                 _gameScreenUIView.getUpButton.gameObject.SetActive(true);
@@ -142,14 +142,12 @@ namespace GameScripts.PlayerScripts
         private void GetUp()
         {
             RaycastHit hit;
-            bool wallUpHead = false;
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.up), out hit, PlayerHeigth))
-                //wallUpHead = true;
-            
+            bool wallUpHead = Physics.Raycast(transform.position, transform.TransformDirection(Vector3.up), 
+                out hit, PlayerHeight);
             if (_characterController.isGrounded && !wallUpHead)
             {
                 upBody.enabled = true;
-                playerCamera.transform.localPosition = new Vector3(0,PlayerHeigth,0);
+                playerCamera.transform.localPosition = new Vector3(0,PlayerHeight,0);
                 _currentWalkSpeed = maxWalkSpeed;
                 _gameScreenUIView.getUpButton.gameObject.SetActive(false);
                 _gameScreenUIView.crouchButton.gameObject.SetActive(true);

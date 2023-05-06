@@ -6,7 +6,7 @@ using Zenject;
 
 public class Level : MonoBehaviour
 {
-    [Inject] private UIManager uiManager;
+    [Inject] private UIManager _uiManager;
     [SerializeField] private List<IBreakable> breakables;
     private bool _allIsFine = true;
     private IBreakable _currentBroken;

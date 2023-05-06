@@ -8,7 +8,7 @@ namespace GameScripts.PlayerScripts
     public class Pockets : MonoBehaviour
     {
         [Inject] private GameScreenUIView _gameScreenUIView;
-        [SerializeField] private PlayerHand hand;
+        [SerializeField] private EmptyHand hand;
         [SerializeField] private Transform handPosition;
         [SerializeField] private float throwForce = 5;
         private IItem _currentItem;
