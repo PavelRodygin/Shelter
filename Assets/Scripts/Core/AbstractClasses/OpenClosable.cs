@@ -1,11 +1,11 @@
-using Interfaces;
+using Core.GameInterfaces;
 using UnityEngine;
 
 namespace Core.AbstractClasses
 {
     public abstract class OpenClosable : MonoBehaviour, IOpenClosable
     {
-        private Animator _animController;
+        protected Animator AnimController;
         protected bool _isOpen = false;
         protected bool _isInteractable = true;
         public bool IsOpen { get; protected set; }
@@ -17,25 +17,26 @@ namespace Core.AbstractClasses
         private static readonly int Open1 = Animator.StringToHash("IsOpen");
         [SerializeField] private Transform pointToLook;
         public Transform PointToLook => pointToLook;
-
-
+        
         protected virtual void Awake()
         {
-            _animController = GetComponentInParent<Animator>();
+            AnimController = GetComponentInParent<Animator>();
         }
 
-        public virtual void Open()
+        public virtual void OpenClose()
         {
-            _animController.SetBool(Open1, true);
-            IsInteractable = false;
-            IsOpen = true;
-        }
-
-        public virtual void Close()
-        {
-            _animController.SetBool(Open1, false);
-            IsInteractable = false;
-            IsOpen = false;
+            if (_isOpen)
+            {
+                AnimController.SetBool(Open1, false);
+                IsInteractable = false;
+                IsOpen = false;
+            }
+            else
+            {
+                AnimController.SetBool(Open1, true);
+                IsInteractable = false;
+                IsOpen = true;
+            }
         }
         
         public void IndicateOpenClose()

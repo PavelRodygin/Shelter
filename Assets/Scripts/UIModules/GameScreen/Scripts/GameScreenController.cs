@@ -1,6 +1,7 @@
 using System;
 using Core.Controllers;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace UIModules.GameScreen.Scripts
 {
@@ -18,17 +19,20 @@ namespace UIModules.GameScreen.Scripts
             _completionSource = new UniTaskCompletionSource<Action>();
         }
         
+        public async UniTask Run(object param)
+        {
+            await _gameScreenUIView.Show();
+            Debug.Log("Показали");
+            var result = await _completionSource.Task;
+            result.Invoke();
+        }
+
+        public async UniTask Stop()
+        {
+            await _gameScreenUIView.Hide();
+        }
+        
         public void Dispose()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public UniTask Run(object param)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public UniTask Stop()
         {
             throw new System.NotImplementedException();
         }

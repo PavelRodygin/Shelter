@@ -1,5 +1,6 @@
+using Core.AbstractClasses;
+using Core.GameInterfaces;
 using Interfaces;
-using UI;
 using UIModules.GameScreen.Scripts;
 using UnityEngine;
 using Zenject;
@@ -8,24 +9,23 @@ namespace GameScripts.PlayerScripts
 {
     public class InteractController : MonoBehaviour
     {
-        private Camera _camera;
         [Inject] private GameScreenUIView _gameScreen;
-        private IOpenClosable _currentOpenClosable;
-        private bool _buttonsShowed;
+        private Camera _playerCamera;
+        private IOpenClosable _currentDoor; 
         private IInteractable _currentInteractable;
-        private IItem _currentItem;
+        private Item _currentItem;
         private Pockets _pockets;
-
+        private bool _buttonsShowed;
 
         private void Awake()
         {
             _pockets = gameObject.GetComponent<Pockets>();
-            _camera = GetComponent<Camera>();
+            _playerCamera = GetComponent<Camera>();
         }
         
-        private void Update()
+        private void FixedUpdate()
         {
-            if (_currentOpenClosable != null)
+            if (_currentDoor != null)
             {         
                 OpenClose();
             }
@@ -41,39 +41,37 @@ namespace GameScripts.PlayerScripts
 
         private void OpenClose()
         {
-            if(!_buttonsShowed && Vector3.Dot(_camera.transform.forward, 
-                   _currentOpenClosable.PointToLook.position - transform.position) > 0.8)               
+            if(!_buttonsShowed && Vector3.Dot(_playerCamera.transform.forward, 
+                   _currentDoor.PointToLook.position - transform.position) > 0.8)               
             {
-                
-                if (_currentOpenClosable.IsOpen)
+                if (_currentDoor.IsOpen)
                 {
-                    _gameScreen.closeButton.gameObject.SetActive(true);
+                    _gameScreen.interactButton.gameObject.SetActive(true);
                     _buttonsShowed = true;
                 }
                 else 
                 {
-                    _gameScreen.openButton.gameObject.SetActive(true);
+                    _gameScreen.interactButton.gameObject.SetActive(true);
                     _buttonsShowed = true;
                 }
             }
-            else if (Vector3.Dot(_camera.transform.forward, 
-                         _currentOpenClosable.PointToLook.position - transform.position) < 0.8) 
+            else if (Vector3.Dot(_playerCamera.transform.forward, 
+                         _currentDoor.PointToLook.position - transform.position) < 0.8) 
             {
-                _gameScreen.openButton.gameObject.SetActive(false);  
-                _gameScreen.closeButton.gameObject.SetActive(false);
+                _gameScreen.interactButton.gameObject.SetActive(false);  
                 _buttonsShowed = false;
             }
         }
         
         private void Interact()
         {
-            if (Vector3.Dot(_camera.transform.forward,
+            if (Vector3.Dot(_playerCamera.transform.forward,
                     _currentInteractable.PointToLook.position - transform.position) > 0.8 )
             {
                 _gameScreen.interactButton.gameObject.SetActive(true);
                 _buttonsShowed = false;
             }
-            else if(Vector3.Dot(_camera.transform.forward, 
+            else if(Vector3.Dot(_playerCamera.transform.forward, 
                         _currentInteractable.PointToLook.position - transform.position) < 0.8) 
             {
                 _buttonsShowed = false;
@@ -83,12 +81,12 @@ namespace GameScripts.PlayerScripts
 
         private void FindItem()
         {
-            if(Vector3.Dot(_camera.transform.forward, _currentItem.Transform.position - transform.position) > 0.8 && !_buttonsShowed)
+            if(Vector3.Dot(_playerCamera.transform.forward, _currentItem.Transform.position - transform.position) > 0.8 && !_buttonsShowed)
             {
                 _buttonsShowed = true;
                 _gameScreen.grabButton.gameObject.SetActive(true);
             }
-            else if(Vector3.Dot(_camera.transform.forward, _currentItem.Transform.position - transform.position) < 0.8)
+            else if(Vector3.Dot(_playerCamera.transform.forward, _currentItem.Transform.position - transform.position) < 0.8)
             {
                 _gameScreen.grabButton.gameObject.SetActive(false);
                 _buttonsShowed = false;
@@ -99,9 +97,9 @@ namespace GameScripts.PlayerScripts
         {
             if (other.transform.parent.TryGetComponent(out IOpenClosable openClosable))
             {
-                _currentOpenClosable = openClosable;
-                _gameScreen.openButton.onClick.AddListener(_currentOpenClosable.Open);
-                _gameScreen.closeButton.onClick.AddListener(_currentOpenClosable.Close);
+                _currentDoor = openClosable;
+                if (_currentDoor.IsOpen)
+                    _gameScreen.interactButton.onClick.AddListener(_currentDoor.OpenClose);
             }
             else if (other.TryGetComponent(out IInteractable interactable))
             {
@@ -110,7 +108,7 @@ namespace GameScripts.PlayerScripts
             }
             else if (other.transform.parent.TryGetComponent(out IItem item))
             {   
-                _currentItem = other.GetComponentInChildren<IItem>();
+                _currentItem = other.GetComponentInChildren<Item>();
                 _gameScreen.grabButton.gameObject.SetActive(true);
                 _gameScreen.grabButton.onClick.AddListener(() => _pockets.GrabItem(_currentItem)); 
             }
@@ -120,15 +118,11 @@ namespace GameScripts.PlayerScripts
         {
             if (other.GetComponentInParent<IOpenClosable>() != null) 
             {
-                if (_currentOpenClosable != null)
+                if (_currentDoor != null)
                 {
-                    _gameScreen.openButton.gameObject.SetActive(true);
-                    _gameScreen.closeButton.gameObject.SetActive(true);    //TODO Нельзя ремувать все
-                    _gameScreen.openButton.onClick.RemoveListener(_currentOpenClosable.Open);
-                    _gameScreen.closeButton.onClick.RemoveListener(_currentOpenClosable.Close);
-                    _gameScreen.openButton.gameObject.SetActive(false);
-                    _gameScreen.closeButton.gameObject.SetActive(false);
-                    _currentOpenClosable = null;
+                    _gameScreen.interactButton.gameObject.SetActive(true);
+                    _gameScreen.interactButton.onClick.RemoveAllListeners();
+                    _currentDoor = null;
                     _buttonsShowed = false;  
                 }
             }

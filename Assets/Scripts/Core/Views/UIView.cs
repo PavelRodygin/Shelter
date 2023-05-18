@@ -9,13 +9,13 @@ namespace Core.Views
     {
         public virtual async UniTask Show()
         {
-            //transform.GetComponent<CanvasGroup>().DOFade(0, 0);
+            transform.GetComponent<CanvasGroup>().DOFade(0, 0);
             gameObject.SetActive(true);
-            //await transform.GetComponent<CanvasGroup>().DOFade(1,0.25f); 
+            await transform.GetComponent<CanvasGroup>().DOFade(1,0.25f); 
         }
         public virtual async UniTask Hide()
         {
-            //await transform.GetComponent<CanvasGroup>().DOFade(0,0.25f); 
+            await transform.GetComponent<CanvasGroup>().DOFade(0,0.25f); 
             gameObject.SetActive(false);
         }
         public void Dispose()

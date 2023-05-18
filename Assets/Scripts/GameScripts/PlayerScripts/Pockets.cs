@@ -1,4 +1,5 @@
-using Interfaces;
+using Core.AbstractClasses;
+using GameScripts.Items;
 using UIModules.GameScreen.Scripts;
 using UnityEngine;
 using Zenject;
@@ -8,19 +9,20 @@ namespace GameScripts.PlayerScripts
     public class Pockets : MonoBehaviour
     {
         [Inject] private GameScreenUIView _gameScreenUIView;
-        [SerializeField] private EmptyHand hand;
+        //[SerializeField] private EmptyHand hand;
         [SerializeField] private Transform handPosition;
-        [SerializeField] private float throwForce = 5;
-        private IItem _currentItem;
+        private float _throwForce = 5;
+        private Item _currentItem;
         
         private void Awake()
         {
-            Initialize();
+            Debug.Log("Gay");
+            //Initialize();
         }
         
         private void Initialize()
         {
-            //_currentItem = hand.GetComponentInChildren<Smartphone>();
+            _currentItem = handPosition.GetComponentInChildren<Smartphone>();
             _currentItem.Grab(handPosition);
             _gameScreenUIView.grabButton.onClick.RemoveListener(() => GrabItem(_currentItem));
             _gameScreenUIView.grabButton.gameObject.SetActive(false);
@@ -28,7 +30,7 @@ namespace GameScripts.PlayerScripts
             _gameScreenUIView.throwButton.onClick.AddListener(() => ThrowItem(_currentItem));
         }
         
-        public void GrabItem(IItem item)
+        public void GrabItem(Item item)
         {
             if (item != null)
             {
@@ -49,7 +51,7 @@ namespace GameScripts.PlayerScripts
             }
         }
 
-        public void ThrowItem(IItem item)
+        public void ThrowItem(Item item)
         {
             _gameScreenUIView.throwButton.onClick.RemoveListener(() => ThrowItem(_currentItem));
             _gameScreenUIView.throwButton.gameObject.SetActive(false);

@@ -1,9 +1,9 @@
 ﻿using System;
 using Core.Controllers;
 using Cysharp.Threading.Tasks;
-using Modules.Settings.Scripts;
 using Systems.AudioSystem;
 using UltimateClean;
+using UnityEngine;
 
 namespace UIModules.SettingsScreen.Scripts
 {
@@ -40,6 +40,7 @@ namespace UIModules.SettingsScreen.Scripts
             _settingsUIView.musicVolumeSlider.onValueChanged.AddListener(ChangeMusicVolumeSlider);
 
             await _settingsUIView.Show();
+            Debug.Log("Показали");
             var result = await _completionSource.Task;
             result.Invoke();
         }

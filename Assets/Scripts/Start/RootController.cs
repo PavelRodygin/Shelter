@@ -24,9 +24,10 @@ namespace Start
         public async UniTaskVoid RunController(ControllerMap controllerMap, object param)
         {
             await _semaphoreSlim.WaitAsync();
-            
             try
             {
+                if (_controllerMapper == null)
+                    Debug.Log("ControllerMapper - NULL");
                 _currentController = _controllerMapper.Resolve(controllerMap);
                 await _currentController.Run(param);
                 await _currentController.Stop();

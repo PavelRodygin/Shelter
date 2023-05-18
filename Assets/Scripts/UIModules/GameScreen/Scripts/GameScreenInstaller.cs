@@ -1,5 +1,4 @@
 using Core.Views;
-using UIModules.MainMenu.Scripts;
 using UnityEngine;
 using Zenject;
 

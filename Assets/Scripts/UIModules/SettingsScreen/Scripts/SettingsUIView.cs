@@ -1,10 +1,11 @@
 ﻿using Core.Views;
+using Modules.Settings.Scripts;
 using Systems.AudioSystem;
 using TMPro;
 using UnityEngine.UI;
 using Zenject;
 
-namespace Modules.Settings.Scripts
+namespace UIModules.SettingsScreen.Scripts
 {
     public class SettingsUIView : UIView
     {
@@ -28,7 +29,7 @@ namespace Modules.Settings.Scripts
         public bool isMusicOn = true;
         public bool isSoundsOn = true;
         
-        private void Awake()
+        private void OnEnable()
         {
             musicDropDown.ClearOptions();
             musicDropDown.AddOptions(_audioSystem.songsNames);

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Interfaces
+namespace Core.GameInterfaces
 {
     public interface IOpenClosable
     {
@@ -8,7 +8,6 @@ namespace Interfaces
         bool IsInteractable { get; }
 
         public Transform PointToLook { get; }
-        void Close();
-        void Open();
+        void OpenClose();
     }
 }

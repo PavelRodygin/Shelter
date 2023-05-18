@@ -8,27 +8,30 @@ namespace GameScripts.PlayerScripts
     {
         [Inject] private GameScreenUIView _gameScreenUIView;
         [SerializeField] GameObject playerCamera;
-        [SerializeField] private CapsuleCollider upBody;
         [SerializeField] private float maxWalkSpeed = 10;
-        [SerializeField] private float sensivity = 5;
+        [SerializeField] private float sensitivity = 5;
         [SerializeField] private float jumpPower = 2;
-        [SerializeField] private float gravityAxceleration = 10;
-        private const float PlayerHeight = 4.5f;
-        private float _currentWalkSpeed;
+        [SerializeField] private float gravityAcceleration = 10;
+        [SerializeField] private Transform groundCheck;
+        [SerializeField] private LayerMask groundMask;
+        private const float PlayerHeight = 2f;
+        private const float GravityAcceleration = -9.81f;
+        private const float GroundDistane = 0.2f;
         private CharacterController _characterController;
-        private Joystick _joystick;
         private Vector3 _moveDirection;
-        private float _gravityForce;
-        private int _rightFingerID;
-        private float _halfScreenWidth;
+        private Vector3 _velocity;
+        private Joystick _joystick;
         private Vector2 _lookInput;
+        private bool _isGrounded;
+        private bool _isCrouching;
+        private float _currentWalkSpeed;
+        private int _rightFingerID;
         private float _cameraPitch;
         public bool isAlive;
         
         private void Awake()
         {
             _characterController = GetComponent<CharacterController>();
-            _halfScreenWidth = Screen.width / 2;
             _joystick = _gameScreenUIView.walkJoystick;
             _rightFingerID = -1;
             _gameScreenUIView.jumpButton.onClick.AddListener(Jump);
@@ -44,7 +47,7 @@ namespace GameScripts.PlayerScripts
 
         private void FixedUpdate()
         {
-            WalkAndLookAround();
+            Walk();
             Gravity();
             if (_rightFingerID != -1)
             {
@@ -60,22 +63,21 @@ namespace GameScripts.PlayerScripts
                 switch (t.phase)
                 {
                     case TouchPhase.Began:
-                        if (t.position.x > _halfScreenWidth && _rightFingerID == -1)
-                        {
+                        if (t.position.x > Screen.width/2f && _rightFingerID == -1)
                             _rightFingerID = t.fingerId;
-                        }
                         break;
                     case TouchPhase.Ended:
                     case TouchPhase.Canceled:
                         if (t.fingerId == _rightFingerID)
                         {
+                            //Stop tracking the left finger
                             _rightFingerID = -1;
                         }
                         break;
                     case TouchPhase.Moved:
                         if (t.fingerId == _rightFingerID)
                         {
-                            _lookInput = t.deltaPosition * (sensivity * Time.deltaTime);
+                            _lookInput = t.deltaPosition * (sensitivity * Time.deltaTime);
                         }
                         break;
                     case TouchPhase.Stationary:
@@ -95,12 +97,12 @@ namespace GameScripts.PlayerScripts
             transform.Rotate(transform.up,_lookInput.x);
         }
 
-        private void WalkAndLookAround()
+        private void Walk()
         {
             _moveDirection = Vector3.zero;
             _moveDirection.x = _joystick.Horizontal;
             _moveDirection.z = _joystick.Vertical;
-            _moveDirection.y = _gravityForce;
+            _moveDirection.y = GravityAcceleration;
             var transform1 = transform;
             _moveDirection = transform1.right * _moveDirection.x + transform1.forward * _moveDirection.z +
                              transform1.up * _moveDirection.y;
@@ -109,21 +111,20 @@ namespace GameScripts.PlayerScripts
 
         private void Gravity()
         {
-            if (!_characterController.isGrounded)
+            _isGrounded = Physics.CheckSphere(groundCheck.position, GroundDistane, groundMask);
+            if (_isGrounded && _velocity.y < 0)
             {
-                _gravityForce -= gravityAxceleration * Time.deltaTime;
+                _velocity.y = -1f;
             }
-            else
-            {
-                _gravityForce = -1f;
-            }
+            _velocity.y += gravityAcceleration * Time.deltaTime;
+            _characterController.Move(_velocity * Time.deltaTime );
         }
 
         private void Jump()
         {
-            if (_characterController.isGrounded && upBody.enabled)
+            if (_characterController.isGrounded && !_isCrouching)
             {
-                _gravityForce = jumpPower;
+                //GravityAcceleration = jumpPower;
             }
         }
 
@@ -131,8 +132,8 @@ namespace GameScripts.PlayerScripts
         {
             if (_characterController.isGrounded)
             {
-                upBody.enabled = false;
-                playerCamera.transform.localPosition = new Vector3(0,PlayerHeight/2,0);
+                _characterController.height = 0.8f;
+                playerCamera.transform.localPosition = new Vector3(0,0.75f, 0);
                 _currentWalkSpeed = maxWalkSpeed / 2;
                 _gameScreenUIView.crouchButton.gameObject.SetActive(false);
                 _gameScreenUIView.getUpButton.gameObject.SetActive(true);
@@ -146,8 +147,7 @@ namespace GameScripts.PlayerScripts
                 out hit, PlayerHeight);
             if (_characterController.isGrounded && !wallUpHead)
             {
-                upBody.enabled = true;
-                playerCamera.transform.localPosition = new Vector3(0,PlayerHeight,0);
+                playerCamera.transform.localPosition = new Vector3(0,PlayerHeight - 0.05f,0);
                 _currentWalkSpeed = maxWalkSpeed;
                 _gameScreenUIView.getUpButton.gameObject.SetActive(false);
                 _gameScreenUIView.crouchButton.gameObject.SetActive(true);

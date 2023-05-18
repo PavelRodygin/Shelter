@@ -2,10 +2,11 @@
 // This code can only be used under the standard Unity Asset Store End User License Agreement.
 // A Copy of the Asset Store EULA is available at http://unity3d.com/company/legal/as_terms.
 
+using UltimateClean;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace UltimateClean
+namespace UltimateCleanGUIPack.Common.Scripts.Core
 {
     /// <summary>
     /// The base button component used in the kit that provides the ability to

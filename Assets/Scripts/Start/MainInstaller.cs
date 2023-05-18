@@ -15,11 +15,11 @@ namespace Start
         //[SerializeField] private DataPersistenceManager dataPersistenceManager;
         //[SerializeField] private ADManager adManager;
         //[SerializeField] private PurchasesManager purchasesManager;
-
+        
         public override void InstallBindings()
         {
             //Container.Bind<DataPersistenceManager>().FromInstance(dataPersistenceManager).AsSingle();
-            Container.Bind<AudioSystem>().FromInstance(audioSystem).AsSingle();
+            //Container.Bind<AudioSystem>().FromInstance(audioSystem).AsSingle();
             //Container.Bind<ADManager>().FromInstance(adManager);
             //Container.Bind<PurchasesManager>().FromInstance(purchasesManager);
             Container.Bind<ControllerMapper>().AsSingle().NonLazy();

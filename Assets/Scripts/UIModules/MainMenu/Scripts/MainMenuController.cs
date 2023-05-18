@@ -26,6 +26,7 @@ namespace UIModules.MainMenu.Scripts
             _mainMenuUIView.exitButton.onClick.AddListener(ExitButtonClicked);
             //_mainMenuUIView.shopButton.onClick.AddListener(OpenShopClicked);
             await _mainMenuUIView.Show();
+            Debug.Log("Показали");
             var result = await _completionSource.Task;
             result.Invoke();
         }
