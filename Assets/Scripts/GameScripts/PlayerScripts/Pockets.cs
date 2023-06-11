@@ -13,14 +13,8 @@ namespace GameScripts.PlayerScripts
         [SerializeField] private Transform handPosition;
         private float _throwForce = 5;
         private Item _currentItem;
-        
-        private void Awake()
-        {
-            Debug.Log("Gay");
-            //Initialize();
-        }
-        
-        private void Initialize()
+
+        public void Initialize()
         {
             _currentItem = handPosition.GetComponentInChildren<Smartphone>();
             _currentItem.Grab(handPosition);

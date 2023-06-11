@@ -4,9 +4,10 @@ using Zenject;
 
 namespace Core.AbstractClasses
 {
+    [RequireComponent(typeof(Rigidbody))]
     public abstract class Item : MonoBehaviour
     {
-        [Inject] private GameScripts.Level.Level _level;
+        [Inject] private GameScripts.Level.GameplayModule _gameplayModule;
         [SerializeField] private Rigidbody _rigidbody;
         public Transform Transform => transform;
 
@@ -26,7 +27,7 @@ namespace Core.AbstractClasses
             _rigidbody.isKinematic = false;
             gameObject.GetComponentInChildren<SphereCollider>().enabled = true;
             gameObject.GetComponentInChildren<MeshCollider>().enabled = true;
-            gameObject.transform.parent = _level.transform;
+            gameObject.transform.parent = _gameplayModule.transform;
         }
     }
 }

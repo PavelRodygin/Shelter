@@ -21,7 +21,7 @@ namespace Start
             {
                 { ControllerMap.MainMenu, typeof(MainMenuController)},
                 { ControllerMap.Settings, typeof(SettingsController)},
-                { ControllerMap.GameScreen, typeof(GameScreenController)},
+                { ControllerMap.GameScreen, typeof(LevelController)},
             };
         }
 
