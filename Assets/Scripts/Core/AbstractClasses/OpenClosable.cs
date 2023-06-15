@@ -4,21 +4,22 @@ using Zenject;
 
 namespace Core.AbstractClasses
 {
+    [RequireComponent(typeof(Animator))]
     public abstract class OpenClosable : MonoBehaviour, IOpenClosable
     {
-        [Inject]
+        [SerializeField] private Transform pointToLook;
         protected Animator AnimController;
-        protected bool _isOpen = false;
+        protected bool _isOpen;
         protected bool _isInteractable = true;
+        private static readonly int Open = Animator.StringToHash("IsOpen");
+
+        public Transform PointToLook => pointToLook;
         public bool IsOpen { get; protected set; }
         public bool IsInteractable
         {
             get => _isInteractable;
             private set => _isInteractable = value;
         }
-        private static readonly int Open = Animator.StringToHash("IsOpen");
-        [SerializeField] private Transform pointToLook;
-        public Transform PointToLook => pointToLook;
         
         protected virtual void Awake()
         {
@@ -35,14 +36,13 @@ namespace Core.AbstractClasses
             }
             else
             {
-                Debug.Log(IsOpen);
                 AnimController.SetBool(Open, true);
                 IsInteractable = false;
                 _isOpen = true;
             }
         }
         
-        public void IndicateOpenClose()
+        public void IndicateOpenClose() //For anim controller
         {
             IsInteractable = true; 
         }

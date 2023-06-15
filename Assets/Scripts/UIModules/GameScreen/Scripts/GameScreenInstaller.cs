@@ -5,8 +5,8 @@ using Zenject;
 
 namespace UIModules.GameScreen.Scripts
 {
-    public class GameScreenInstaller: MonoInstaller
-    {
+    public class GameScreenInstaller: MonoInstaller<GameScreenInstaller>
+    {   
         [SerializeField] private GameScreenUIView gameScreenUIViewPrefab;
         [SerializeField] private GameplayModule gameplayModule;
         

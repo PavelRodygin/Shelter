@@ -4,7 +4,7 @@ using Zenject;
 
 namespace UIModules.SettingsScreen.Scripts
 {
-    public class SettingsInstaller : MonoInstaller
+    public class SettingsInstaller : MonoInstaller<SettingsInstaller>
     {
         [SerializeField] private SettingsUIView settingsUIViewPrefab;
         

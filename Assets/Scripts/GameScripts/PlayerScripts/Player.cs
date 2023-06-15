@@ -14,6 +14,7 @@ namespace GameScripts.PlayerScripts
         private PlayerInteractModule _interactModule;
         private Pockets _pockets;
         private Vector3 _stockCameraPosition;
+        private Vector3 _cameraStandPosition = new Vector3(0, 1.6f, 0f);
         private bool _isAlive;
         
         public bool IsAlive { get; private set; }
@@ -45,7 +46,7 @@ namespace GameScripts.PlayerScripts
             _camera.orthographic = false;
             _camera.transform.parent = transform;
             _stockCameraPosition = _camera.gameObject.transform.position;
-            _camera.transform.position = transform.position + new Vector3(0, 1.8f, 0);
+            _camera.transform.position = _cameraStandPosition;
         }
 
         public void Hide()

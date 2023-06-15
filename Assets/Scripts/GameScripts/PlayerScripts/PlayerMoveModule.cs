@@ -1,9 +1,8 @@
 using System;
-using System.Diagnostics;
+using DG.Tweening;
 using UIModules.GameScreen.Scripts;
 using UnityEngine;
 using Zenject;
-using Debug = UnityEngine.Debug;
 
 namespace GameScripts.PlayerScripts
 {
@@ -21,6 +20,8 @@ namespace GameScripts.PlayerScripts
         private Vector3 _moveDirection;
         private Vector3 _velocity;
         private Vector2 _lookInput;
+        private Vector3 _cameraStandPosition = new Vector3(0, 1.6f, 0f);
+        private Vector3 _cameraCrouchPosition = new Vector3(0f,0.4f,0f);
         private const float PlayerHeight = 2f;
         private bool _isGrounded;
         private float _groundDistance = 0.4f;
@@ -124,27 +125,35 @@ namespace GameScripts.PlayerScripts
 
         private void CrouchGetUp()
         {
-            if (_characterController.isGrounded)
+            if (_characterController.isGrounded && !_isCrouching)
             {
+                _isCrouching = true;
                 _characterController.height = 0.8f;
-                _camera.transform.localPosition = new Vector3(0, 0.75f, 0);
+                _camera.transform.DOLocalMove(_cameraCrouchPosition, 0.25f);
+                //_camera.transform.localPosition = _cameraCrouchPosition;
                 _currentWalkSpeed = maxWalkSpeed / 2;
-                _gameScreenUIView.crouchButton.gameObject.SetActive(false);
+            }
+            else if (!Physics.Raycast(transform.position, transform.TransformDirection(Vector3.up)))
+            {
+                _isCrouching = false;
+                _characterController.height = 2f;
+                _camera.transform.DOLocalMove(_cameraCrouchPosition, 0.25f);
+                //_camera.transform.localPosition = _cameraCrouchPosition;
+                _currentWalkSpeed = maxWalkSpeed;
             }
         }
 
-        private void GetUp()
-        {
-            RaycastHit hit;
-            bool wallUpHead = Physics.Raycast(transform.position, transform.TransformDirection(Vector3.up),
-                out hit, PlayerHeight);
-            if (_characterController.isGrounded && !wallUpHead)
-            {
-                _camera.transform.localPosition = new Vector3(0, PlayerHeight - 0.05f, 0);
-                _currentWalkSpeed = maxWalkSpeed;
-                _gameScreenUIView.crouchButton.gameObject.SetActive(true);
-            }
-        }
+        // private void GetUp()
+        // {
+        //     RaycastHit hit;
+        //     bool wallUpHead = Physics.Raycast(transform.position, transform.TransformDirection(Vector3.up),
+        //         out hit, PlayerHeight);
+        //     if (_characterController.isGrounded && !wallUpHead)
+        //     {
+        //         _camera.transform.localPosition = new Vector3(0, PlayerHeight - 0.05f, 0);
+        //         _currentWalkSpeed = maxWalkSpeed;
+        //     }
+        // }
 
         private void OnDisable()
         {
