@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Interfaces
+namespace Core.GameInterfaces
 {
     public interface IInteractable
     {

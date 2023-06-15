@@ -1,9 +1,54 @@
 fileFormatVersion: 2
-guid: 7fac837432381e847bf63301e01c8602
+guid: 4338070a3370b964aa8fa19591252946
 ModelImporter:
-  serializedVersion: 21202
+  serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Box1
+    second: {fileID: 2100000, guid: f340433ce6523f944bedb5715c958d82, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Box2
+    second: {fileID: 2100000, guid: 25f5a7a42c6fa0d4d91a1764501c4f69, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DarkGreen
+    second: {fileID: 2100000, guid: 4068b8655af7e02489491ac8ace21047, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Gray
+    second: {fileID: 2100000, guid: dcd0a4d3de093c6459e3790e46a415ca, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Gray2
+    second: {fileID: 2100000, guid: 80d1487b034bde84182748e254fd6b5c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Green
+    second: {fileID: 2100000, guid: 5b127664994625d4a95bf7418e63a8ed, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Hand
+    second: {fileID: 2100000, guid: 0b1d02707ab402349aa1b899cf1fa38d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rubber
+    second: {fileID: 2100000, guid: 3000e40db07d70d42a2008c1debc4829, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ThirdGreen
+    second: {fileID: 2100000, guid: 4a79fbefcba19074384825c8158336ca, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -99,6 +144,7 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 0
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
   additionalBone: 0
   userData: 
   assetBundleName: 
