@@ -1,20 +1,18 @@
 using System;
 using Core.Controllers;
 using Cysharp.Threading.Tasks;
-using GameScripts.Level;
-using UnityEngine;
-using Zenject;
+using GameScripts;
 
 namespace UIModules.GameScreen.Scripts
 {
-    public class LevelController : IController
+    public class GameScreenController : IController
     {
         private readonly IRootController _rootController;
         private readonly GameScreenUIView _gameScreenUIView;
         private readonly GameplayModule _gameplayModule;
         private readonly UniTaskCompletionSource<Action> _completionSource;
         
-        public LevelController(IRootController rootController, GameScreenUIView gameScreenUIView, GameplayModule gameplayModule)
+        public GameScreenController(IRootController rootController, GameScreenUIView gameScreenUIView, GameplayModule gameplayModule)
         {
             _rootController = rootController;
             _gameScreenUIView = gameScreenUIView;
@@ -25,15 +23,27 @@ namespace UIModules.GameScreen.Scripts
         
         public async UniTask Run(object param)
         {
-            _gameplayModule.StartGame();
             await _gameScreenUIView.Show();
+            SetupEventListeners();
+            _gameplayModule.gameObject.SetActive(true);
+            _gameplayModule.Initialize(_gameScreenUIView);
+            _gameplayModule.Show();
+            _gameplayModule.StartGame();
+            
             var result = await _completionSource.Task;
             result.Invoke();
+        }
+        
+        private void SetupEventListeners()
+        {
+            _gameScreenUIView.interactButton.onClick.AddListener(() => _gameScreenUIView.interactButton.gameObject.SetActive(false));
+            _gameScreenUIView.dropButton.onClick.AddListener(() => _gameScreenUIView.dropButton.gameObject.SetActive(false));
         }
 
         public async UniTask Stop()
         {
             await _gameScreenUIView.Hide();
+            _gameplayModule.Hide();
         }
         
         public void Dispose()

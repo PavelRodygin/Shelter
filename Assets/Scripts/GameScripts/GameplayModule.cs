@@ -1,31 +1,36 @@
 using System.Collections.Generic;
+using Core.AbstractClasses;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using GameScripts.PlayerScripts;
 using Interfaces;
 using UIModules.GameScreen.Scripts;
 using UnityEngine;
-using Zenject;
 
-namespace GameScripts.Level
+namespace GameScripts
 {
     public class GameplayModule : MonoBehaviour
     {
-        [Inject] private GameScreenUIView _gameScreenUIView;
         [SerializeField] private GameObject levelWalls;
         [SerializeField] private Core.AbstractClasses.OpenClosable door;
-        //[SerializeField] private List<Breakable> breakables = new();  
-        //[SerializeField] private float breakingTime = 20000f;
-        //[SerializeField] private float breakTimeMultiplier = 1.2f;
+        [SerializeField] private List<Breakable> breakables = new();  
+        [SerializeField] private float breakingTime = 20000f;
+        [SerializeField] private float breakTimeMultiplier = 1.2f;
         [SerializeField] private float fadeTime = 0.5f;
         [SerializeField] private int showTime = 2000;
         public Player player;
-        private PlayerMoveController _playerMoveController;
+        private GameScreenUIView _gameScreenUIView;
+        private IBreakable _currentBroken;
         private bool _surviveStarted;
-        //private bool _allIsFine = true;
-        private IBreakable _currentBroken; 
+        private bool _allIsFine = true;
         //private List<ITask> _tasks;
-  
+
+        public void Initialize(GameScreenUIView gameScreenUIView)
+        {
+            _gameScreenUIView = gameScreenUIView;
+            player = Instantiate(player, transform).GetComponent<Player>();
+            player.Initialize(gameScreenUIView);
+        }
 
         public async void StartGame()
         {
@@ -42,8 +47,10 @@ namespace GameScripts.Level
 
         private void GenerateLevel()
         {
-            Instantiate(levelWalls);
-            Instantiate(door);
+            player.transform.position = new Vector3(-0.3f, 1f, -5f);
+            levelWalls = Instantiate(levelWalls, transform);
+            door = Instantiate(door, transform);
+            door.transform.position = new Vector3(0f, 0.482f, 0f);
         }
 
         // private void DetonateBomb()
@@ -61,14 +68,10 @@ namespace GameScripts.Level
                 { "Welcome to the shelter", 2000},
                 { "Now you need to close all the doors", 2000},
                 //добавляем в таблицу задач закрытие дверей
-            }; 
+            };
+            ShowGameMessage(messages).Forget();
         }
-        
-        // private async void StartSurvive()
-        // {
-        //     
-        // }
-        
+
         // private async void BreakSomething()
         // {
         //     while (player.MoveController.IsAlive)
@@ -79,7 +82,7 @@ namespace GameScripts.Level
         //     }
         // }
         
-        public async UniTask ShowGameMessage(Dictionary<string, int> messages)
+        private async UniTask ShowGameMessage(Dictionary<string, int> messages)
         {
             foreach (var message in messages)
             {
@@ -97,14 +100,15 @@ namespace GameScripts.Level
         {
             //gameObject.SetActive(true); ?????
             GenerateLevel();
-            player.gameObject.SetActive(true);
-            _playerMoveController.OnPlayerInsideShelter += OnPlayerInsideShelter;
+            player.MoveModule.OnPlayerInsideShelter += OnPlayerInsideShelter;
         }
 
         public void Hide()
         {
-            _playerMoveController.OnPlayerInsideShelter -= OnPlayerInsideShelter;
-            player.gameObject.SetActive(false);
+            player.MoveModule.OnPlayerInsideShelter -= OnPlayerInsideShelter;
+            player.Hide();
+            Destroy(player);
+            Destroy(door);
             Destroy(levelWalls);
         }
     }

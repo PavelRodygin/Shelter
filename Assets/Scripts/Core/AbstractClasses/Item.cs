@@ -1,4 +1,4 @@
-using UnityEditor.PackageManager.Requests;
+using GameScripts;
 using UnityEngine;
 using Zenject;
 
@@ -7,13 +7,13 @@ namespace Core.AbstractClasses
     [RequireComponent(typeof(Rigidbody))]
     public abstract class Item : MonoBehaviour
     {
-        [Inject] private GameScripts.Level.GameplayModule _gameplayModule;
-        [SerializeField] private Rigidbody _rigidbody;
+        [Inject] private GameplayModule _gameplayModule;
+        [SerializeField] private Rigidbody rigidBody;
         public Transform Transform => transform;
 
         public virtual void Grab(Transform owner)                         
         {
-            _rigidbody.isKinematic = true;
+            rigidBody.isKinematic = true;
             gameObject.GetComponentInChildren<SphereCollider>().enabled = false;
             gameObject.GetComponentInChildren<MeshCollider>().enabled = false;
             var transform1 = transform;
@@ -24,10 +24,12 @@ namespace Core.AbstractClasses
         
         public virtual void Throw() 
         {
-            _rigidbody.isKinematic = false;
-            gameObject.GetComponentInChildren<SphereCollider>().enabled = true;
-            gameObject.GetComponentInChildren<MeshCollider>().enabled = true;
-            gameObject.transform.parent = _gameplayModule.transform;
+            if (_gameplayModule == null)
+                Debug.Log("ZENJECT НЕ РАБОТАЕТ");
+            rigidBody.isKinematic = false;
+            GetComponentInChildren<SphereCollider>().enabled = true;
+            GetComponentInChildren<MeshCollider>().enabled = true;
+            transform.parent = _gameplayModule.transform;
         }
     }
 }

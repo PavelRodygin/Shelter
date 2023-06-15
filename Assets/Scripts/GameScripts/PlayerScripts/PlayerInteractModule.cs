@@ -7,17 +7,22 @@ using Zenject;
 
 namespace GameScripts.PlayerScripts
 {
-    public class PlayerInteractController : MonoBehaviour
+    public class PlayerInteractModule : MonoBehaviour
     {
-        [Inject] private GameScreenUIView _gameScreenUIView;
-        [Inject] Camera _playerCamera;
+        [Inject] Camera _camera;
+        private GameScreenUIView _gameScreenUIView;
         private IOpenClosable _currentDoor; 
         private IInteractable _currentInteractable;
         private Item _currentItem;
         private Pockets _pockets;
-        private bool _buttonsShowed;
-
-        private void FixedUpdate()
+        private bool _interactButtonShowed;
+        
+        public void Initialize(GameScreenUIView gameScreenUIView)
+        {
+            _camera = Camera.main;  //TODO tododoodod!!!!!!!!
+            _gameScreenUIView = gameScreenUIView;
+        }
+        private void Update()
         {
             if (_currentDoor != null)
             {         
@@ -35,76 +40,72 @@ namespace GameScripts.PlayerScripts
 
         private void OpenClose()
         {
-            if(!_buttonsShowed && Vector3.Dot(_playerCamera.transform.forward, 
-                   _currentDoor.PointToLook.position - transform.position) > 0.8)               
+            if(!_interactButtonShowed && Vector3.Dot(_camera.transform.forward, 
+                   _currentDoor.PointToLook.position - _camera.transform.position) > 0.8)               
             {
                 if (_currentDoor.IsOpen)
                 {
                     _gameScreenUIView.interactButton.gameObject.SetActive(true);
-                    _buttonsShowed = true;
+                    _interactButtonShowed = true;
                 }
                 else 
                 {
                     _gameScreenUIView.interactButton.gameObject.SetActive(true);
-                    _buttonsShowed = true;
+                    _interactButtonShowed = true;
                 }
             }
-            else if (Vector3.Dot(_playerCamera.transform.forward, 
+            else if (Vector3.Dot(_camera.transform.forward, 
                          _currentDoor.PointToLook.position - transform.position) < 0.8) 
             {
                 _gameScreenUIView.interactButton.gameObject.SetActive(false);  
-                _buttonsShowed = false;
+                _interactButtonShowed = false;
             }
         }
         
         private void Interact()
         {
-            if (Vector3.Dot(_playerCamera.transform.forward,
+            if (Vector3.Dot(_camera.transform.forward,
                     _currentInteractable.PointToLook.position - transform.position) > 0.8 )
             {
                 _gameScreenUIView.interactButton.gameObject.SetActive(true);
-                _buttonsShowed = false;
+                _interactButtonShowed = false;
             }
-            else if(Vector3.Dot(_playerCamera.transform.forward, 
+            else if(Vector3.Dot(_camera.transform.forward, 
                         _currentInteractable.PointToLook.position - transform.position) < 0.8) 
             {
-                _buttonsShowed = false;
+                _interactButtonShowed = false;
                 _gameScreenUIView.interactButton.gameObject.SetActive(false);
             }
         }
 
         private void FindItem()
         {
-            if(Vector3.Dot(_playerCamera.transform.forward, _currentItem.Transform.position - transform.position) > 0.8 && !_buttonsShowed)
+            if(Vector3.Dot(_camera.transform.forward, _currentItem.Transform.position - transform.position) > 0.8 && !_interactButtonShowed)
             {
-                _buttonsShowed = true;
-                _gameScreenUIView.grabButton.gameObject.SetActive(true);
+                _interactButtonShowed = true; 
+                _gameScreenUIView.interactButton.gameObject.SetActive(true);
             }
-            else if(Vector3.Dot(_playerCamera.transform.forward, _currentItem.Transform.position - transform.position) < 0.8)
+            else if(Vector3.Dot(_camera.transform.forward, _currentItem.Transform.position - transform.position) < 0.8)
             {
-                _gameScreenUIView.grabButton.gameObject.SetActive(false);
-                _buttonsShowed = false;
+                _gameScreenUIView.interactButton.gameObject.SetActive(false);
+                _interactButtonShowed = false;
             }
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.transform.parent.TryGetComponent(out IOpenClosable openClosable))
+            if (other.transform.parent.TryGetComponent(out _currentDoor))
             {
-                _currentDoor = openClosable;
-                if (_currentDoor.IsOpen)
-                    _gameScreenUIView.interactButton.onClick.AddListener(_currentDoor.OpenClose);
+                _gameScreenUIView.interactButton.onClick.AddListener(_currentDoor.OpenClose);
             }
-            else if (other.TryGetComponent(out IInteractable interactable))
+            else if (other.TryGetComponent(out _currentInteractable))
             {
-                _currentInteractable = interactable;
                 _gameScreenUIView.interactButton.onClick.AddListener(_currentInteractable.Interact);
             }
-            else if (other.transform.parent.TryGetComponent(out IItem item))
+            else if (other.transform.parent.TryGetComponent(out _currentItem))
             {   
-                _currentItem = other.GetComponentInChildren<Item>();
-                _gameScreenUIView.grabButton.gameObject.SetActive(true);
-                _gameScreenUIView.grabButton.onClick.AddListener(() => _pockets.GrabItem(_currentItem)); 
+                _gameScreenUIView.interactButton.gameObject.SetActive(true);
+                _gameScreenUIView.interactButton.onClick.AddListener(() => _pockets.GrabItem(_currentItem)); 
             }
         }
         
@@ -117,7 +118,7 @@ namespace GameScripts.PlayerScripts
                     _gameScreenUIView.interactButton.gameObject.SetActive(true);
                     _gameScreenUIView.interactButton.onClick.RemoveAllListeners();
                     _currentDoor = null;
-                    _buttonsShowed = false;  
+                    _interactButtonShowed = false;  
                 }
             }
             else if (other.GetComponentInParent<IInteractable>() != null)
@@ -128,14 +129,14 @@ namespace GameScripts.PlayerScripts
                     _gameScreenUIView.interactButton.onClick.RemoveListener(_currentInteractable.Interact);
                     _gameScreenUIView.interactButton.gameObject.SetActive(false);
                     _currentInteractable = null;
-                    _buttonsShowed = false;
+                    _interactButtonShowed = false;
                 }
             }
             else if (other.GetComponentInParent<IItem>() != null)
             {
-                _gameScreenUIView.grabButton.gameObject.SetActive(true);
-                _gameScreenUIView.grabButton.onClick.RemoveListener(() => _pockets.GrabItem(_currentItem));
-                _gameScreenUIView.grabButton.gameObject.SetActive(false);
+                _gameScreenUIView.interactButton.gameObject.SetActive(true);
+                _gameScreenUIView.interactButton.onClick.RemoveListener(() => _pockets.GrabItem(_currentItem));
+                _gameScreenUIView.interactButton.gameObject.SetActive(false);
                 _currentItem = null;
             }
         }

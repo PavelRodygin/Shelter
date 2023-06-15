@@ -1,9 +1,9 @@
 using UnityEngine;
 
-namespace GameScripts.Level
+namespace GameScripts
 {
     public class ShelterZone : MonoBehaviour
     {
-        //empty script to indicate
+        
     }
 }

@@ -1,21 +1,21 @@
 using Core.Views;
-using GameScripts.Level;
+using GameScripts;
 using UnityEngine;
 using Zenject;
 
 namespace UIModules.GameScreen.Scripts
 {
-    public class LevelInstaller: MonoInstaller
+    public class GameScreenInstaller: MonoInstaller
     {
         [SerializeField] private GameScreenUIView gameScreenUIViewPrefab;
-        [SerializeField] private GameplayModule gameplayModulePrefab;
+        [SerializeField] private GameplayModule gameplayModule;
         
         public override void InstallBindings()
         { 
             Container.Bind<GameScreenUIView>().FromComponentInNewPrefab(gameScreenUIViewPrefab)
                 .UnderTransform(c => c.Container.Resolve<RootCanvas>().transform).AsTransient();
-            Container.Bind<LevelController>().AsTransient();
-            Container.Bind<GameplayModule>().FromInstance(gameplayModulePrefab).AsSingle();
+            Container.Bind<GameScreenController>().AsTransient();
+            Container.Bind<GameplayModule>().FromInstance(gameplayModule).AsSingle();
         }
     }
 }

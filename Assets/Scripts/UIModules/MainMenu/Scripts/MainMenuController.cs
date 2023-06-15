@@ -21,13 +21,17 @@ namespace UIModules.MainMenu.Scripts
         
         public async UniTask Run(object param)
         {
-            _mainMenuUIView.startGameButton.onClick.AddListener(StartGameButtonClicked);
-            _mainMenuUIView.settingsButton.onClick.AddListener(PlaySettingsButtonClicked);
-            _mainMenuUIView.exitButton.onClick.AddListener(ExitButtonClicked);
-            //_mainMenuUIView.shopButton.onClick.AddListener(OpenShopClicked);
+            SetupEventListeners();
             await _mainMenuUIView.Show();
             var result = await _completionSource.Task;
             result.Invoke();
+        }
+        
+        private void SetupEventListeners()
+        {
+            _mainMenuUIView.startGameButton.onClick.AddListener(StartGameButtonClicked);
+            _mainMenuUIView.settingsButton.onClick.AddListener(PlaySettingsButtonClicked);
+            _mainMenuUIView.exitButton.onClick.AddListener(ExitButtonClicked);
         }
         
         public async UniTask Stop()
@@ -44,22 +48,7 @@ namespace UIModules.MainMenu.Scripts
         {
             _completionSource.TrySetResult(() => _rootController.RunController(ControllerMap.Settings));
         }
-
-        private void OpenInfoPlacardButtonClicked()
-        {
-            Application.OpenURL("https://t.me/+_Tb9ZgJXYcw4NTNi");
-        }
         
-        private void PlacardInfoCloseButtonClicked()
-        {
-            //_mainMenuUIView.informationPlacard.GetComponent<Popup>().Close();   
-        }
-
-        private void OpenShopClicked()
-        {
-            //_completionSource.TrySetResult(() => _rootController.RunController(ControllerMap.Shop));
-        }
-
         private void ExitButtonClicked()
         {
             Application.Quit();

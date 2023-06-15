@@ -2,7 +2,6 @@
 using Core.Controllers;
 using Cysharp.Threading.Tasks;
 using Systems.AudioSystem;
-using UltimateClean;
 using UnityEngine;
 
 namespace UIModules.SettingsScreen.Scripts
@@ -24,8 +23,7 @@ namespace UIModules.SettingsScreen.Scripts
             _rootController = rootController;
             _settingsUIView = settingsUIView;
             _completionSource = new UniTaskCompletionSource<Action>();
-            _savedMusicVolume = _audioSystem.musicVolume;
-            _savedSoundVolume = _audioSystem.soundsVolume;
+            
             _savedSongIndex = _settingsUIView.musicDropDown.value;
         }
 
@@ -57,83 +55,27 @@ namespace UIModules.SettingsScreen.Scripts
         }
         private void PlayBackButtonClicked()
         {
-            _settingsUIView.languageDropDown.value = _savedLanguage;    
-            _audioSystem.ChangeMusicVolume(_savedMusicVolume);
-            _audioSystem.soundsVolume = _savedSoundVolume;
-            if (_savedSongIndex != _settingsUIView.musicDropDown.value)
-                _audioSystem.PlaySong(_savedSongIndex);
             _completionSource.TrySetResult(() => _rootController.RunController(ControllerMap.MainMenu));
         }
 
         private void PlaySoundsSwitchButtonClicked()
         {
-            if (_audioSystem.soundsVolume > 0)
-            {
-                _audioSystem.soundsVolume = 0;
-                _settingsUIView.isSoundsOn = false;
-                _settingsUIView.soundsVolumeSlider.value = 0;
-                _settingsUIView.soundsVolumeSpriteSwitch.ToggleDisable();
-            }
-            else if (_audioSystem.soundsVolume == 0)
-            {
-                _audioSystem.soundsVolume = 0.5f;
-                _settingsUIView.isSoundsOn = true;
-                _settingsUIView.soundsVolumeSlider.value = 50f;
-                _settingsUIView.soundsVolumeSpriteSwitch.ToggleEnabled();
-            }
+           
         }
 
         private void PlayMusicSwitchButtonClicked()
         {
-            if (_audioSystem.musicVolume > 0)
-            {
-                _audioSystem.ChangeMusicVolume(0);
-                _settingsUIView.isMusicOn = false;
-                _settingsUIView.musicVolumeSlider.value = 0;
-                _settingsUIView.musicVolumeSpriteSwitch.ToggleDisable();
-            }
-            else if (_audioSystem.musicVolume == 0)
-            {
-                _audioSystem.ChangeMusicVolume(.5f);
-                _settingsUIView.isMusicOn = true;
-                _settingsUIView.musicVolumeSlider.value = 50f;
-                _settingsUIView.musicVolumeSpriteSwitch.ToggleEnabled();
-            }
+            
         }
 
         private void ChangeSoundsVolumeSlider(float value)
         {
-            _audioSystem.soundsVolume = _settingsUIView.soundsVolumeSlider.value / 100;
-            if (!_settingsUIView.isSoundsOn && _settingsUIView.soundsVolumeSlider.value > 0)
-            {
-                _settingsUIView.soundSwitch.GetComponent<Switch>().Toggle();
-                _settingsUIView.isSoundsOn = true;
-                _settingsUIView.soundsVolumeSpriteSwitch.ToggleEnabled();
-            }
-            if (_settingsUIView.soundsVolumeSlider.value == 0 && _settingsUIView.isSoundsOn)
-            {
-                _settingsUIView.soundSwitch.GetComponent<Switch>().Toggle();
-                _settingsUIView.isSoundsOn = false;
-                _settingsUIView.soundsVolumeSpriteSwitch.ToggleDisable();
-            }
+         
         }
 
         private void ChangeMusicVolumeSlider(float value)
         {
-            _audioSystem.ChangeMusicVolume(_settingsUIView.musicVolumeSlider.value / 100);
-            if (!_settingsUIView.isMusicOn && _settingsUIView.musicVolumeSlider.value > 0)
-            {
-                _settingsUIView.musicSwitch.GetComponent<Switch>().Toggle();
-                _settingsUIView.isMusicOn = true;
-                _settingsUIView.musicVolumeSpriteSwitch.ToggleEnabled();
-
-            }
-            if (_settingsUIView.musicVolumeSlider.value == 0 && _settingsUIView.isMusicOn)
-            {
-                _settingsUIView.musicSwitch.GetComponent<Switch>().Toggle();
-                _settingsUIView.isMusicOn = false;
-                _settingsUIView.musicVolumeSpriteSwitch.ToggleDisable();
-            }
+           
         }
 
         public void Dispose()
