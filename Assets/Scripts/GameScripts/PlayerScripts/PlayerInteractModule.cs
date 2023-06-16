@@ -1,61 +1,55 @@
 using Core.AbstractClasses;
 using Core.GameInterfaces;
-using Interfaces;
 using UIModules.GameScreen.Scripts;
 using UnityEngine;
-using Zenject;
 
 namespace GameScripts.PlayerScripts
 {
     public class PlayerInteractModule : MonoBehaviour
     {
-        [Inject] Camera _camera;
+        [SerializeField] private float minLookCosine = 0.9f; // D(cos) = [-1;1]
+        private Camera _camera;
         private GameScreenUIView _gameScreenUIView;
+        private Pockets _pockets;   //Items manager
         private IOpenClosable _currentDoor; 
         private IInteractable _currentInteractable;
         private Item _currentItem;
-        private Pockets _pockets;
         private bool _interactButtonShowed;
-        
-        public void Initialize(GameScreenUIView gameScreenUIView)
+
+        public void Initialize(GameScreenUIView gameScreenUIView, Camera camera)
         {
-            _camera = Camera.main;  //TODO tododoodod!!!!!!!!
+            _camera = camera;
             _gameScreenUIView = gameScreenUIView;
+            _pockets = GetComponent<Pockets>();
         }
+        
         private void Update()
         {
             if (_currentDoor != null)
             {         
+                print("OpenClose");
                 OpenClose();
             }
             else if (_currentInteractable != null)
             {
+                print("Interact");
                 Interact();
             }
             else if (_currentItem != null)
             {
+                print("FindItem");
                 FindItem();
             }
         }
 
         private void OpenClose()
         {
-            if(!_interactButtonShowed && Vector3.Dot(_camera.transform.forward, 
-                   _currentDoor.PointToLook.position - _camera.transform.position) > 0.8)               
+            if(!_interactButtonShowed && CheckLookToObject(_currentDoor.PointToLook))               
             {
-                if (_currentDoor.IsOpen)
-                {
-                    _gameScreenUIView.interactButton.gameObject.SetActive(true);
-                    _interactButtonShowed = true;
-                }
-                else 
-                {
-                    _gameScreenUIView.interactButton.gameObject.SetActive(true);
-                    _interactButtonShowed = true;
-                }
+                _gameScreenUIView.interactButton.gameObject.SetActive(true);
+                _interactButtonShowed = true;
             }
-            else if (Vector3.Dot(_camera.transform.forward, 
-                         _currentDoor.PointToLook.position - transform.position) < 0.8) 
+            else if (!CheckLookToObject(_currentDoor.PointToLook)) 
             {
                 _gameScreenUIView.interactButton.gameObject.SetActive(false);  
                 _interactButtonShowed = false;
@@ -64,49 +58,63 @@ namespace GameScripts.PlayerScripts
         
         private void Interact()
         {
-            if (Vector3.Dot(_camera.transform.forward,
-                    _currentInteractable.PointToLook.position - transform.position) > 0.8 )
+            if (CheckLookToObject(_currentInteractable.PointToLook))
             {
                 _gameScreenUIView.interactButton.gameObject.SetActive(true);
                 _interactButtonShowed = false;
             }
-            else if(Vector3.Dot(_camera.transform.forward, 
-                        _currentInteractable.PointToLook.position - transform.position) < 0.8) 
+            else if(!CheckLookToObject(_currentInteractable.PointToLook)) 
             {
-                _interactButtonShowed = false;
                 _gameScreenUIView.interactButton.gameObject.SetActive(false);
+                _interactButtonShowed = false;
             }
         }
 
         private void FindItem()
         {
-            if(Vector3.Dot(_camera.transform.forward, _currentItem.Transform.position - transform.position) > 0.8 && !_interactButtonShowed)
+            if(CheckLookToObject(_currentItem.transform))
             {
                 _interactButtonShowed = true; 
                 _gameScreenUIView.interactButton.gameObject.SetActive(true);
             }
-            else if(Vector3.Dot(_camera.transform.forward, _currentItem.Transform.position - transform.position) < 0.8)
+            else if(!CheckLookToObject(_currentItem.transform))
             {
                 _gameScreenUIView.interactButton.gameObject.SetActive(false);
                 _interactButtonShowed = false;
             }
         }
 
+        private bool CheckLookToObject(Transform objectToLook)
+        {
+            if (Vector3.Dot(_camera.transform.forward.normalized,   
+                    (objectToLook.position - _camera.transform.position).normalized) > minLookCosine)
+                return true;
+            
+            return false;
+        }
+        
         private void OnTriggerEnter(Collider other)
         {
             if (other.transform.parent.TryGetComponent(out _currentDoor))
             {
                 _gameScreenUIView.interactButton.onClick.AddListener(_currentDoor.OpenClose);
             }
-            else if (other.TryGetComponent(out _currentInteractable))
+            else if (other.transform.parent.TryGetComponent(out _currentInteractable))
             {
                 _gameScreenUIView.interactButton.onClick.AddListener(_currentInteractable.Interact);
             }
-            else if (other.transform.parent.TryGetComponent(out _currentItem))
-            {   
+            else if (other.TryGetComponent(out _currentItem))
+            {
                 _gameScreenUIView.interactButton.gameObject.SetActive(true);
-                _gameScreenUIView.interactButton.onClick.AddListener(() => _pockets.GrabItem(_currentItem)); 
+                _gameScreenUIView.interactButton.onClick.AddListener(OnItemFound); 
+                _gameScreenUIView.interactButton.gameObject.SetActive(false);
             }
+        }
+
+        private void OnItemFound()
+        {
+            _pockets.GrabItem(_currentItem);
+            _currentItem = null;
         }
         
         private void OnTriggerExit(Collider other)
@@ -116,7 +124,8 @@ namespace GameScripts.PlayerScripts
                 if (_currentDoor != null)
                 {
                     _gameScreenUIView.interactButton.gameObject.SetActive(true);
-                    _gameScreenUIView.interactButton.onClick.RemoveAllListeners();
+                    _gameScreenUIView.interactButton.onClick.RemoveListener(_currentDoor.OpenClose);
+                    _gameScreenUIView.interactButton.gameObject.SetActive(false);
                     _currentDoor = null;
                     _interactButtonShowed = false;  
                 }
@@ -132,10 +141,10 @@ namespace GameScripts.PlayerScripts
                     _interactButtonShowed = false;
                 }
             }
-            else if (other.GetComponentInParent<IItem>() != null)
+            else if (other.GetComponent<IItem>() != null)
             {
                 _gameScreenUIView.interactButton.gameObject.SetActive(true);
-                _gameScreenUIView.interactButton.onClick.RemoveListener(() => _pockets.GrabItem(_currentItem));
+                _gameScreenUIView.interactButton.onClick.RemoveListener(OnItemFound);
                 _gameScreenUIView.interactButton.gameObject.SetActive(false);
                 _currentItem = null;
             }

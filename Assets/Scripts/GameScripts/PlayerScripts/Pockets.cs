@@ -2,52 +2,52 @@ using Core.AbstractClasses;
 using GameScripts.Items;
 using UIModules.GameScreen.Scripts;
 using UnityEngine;
-using Zenject;
 
 namespace GameScripts.PlayerScripts
 {
     public class Pockets : MonoBehaviour
     {
+        [SerializeField] private Transform hand;
+        [SerializeField] private Vector3 handPosition = new(0.3f, -0.2f, 0.5f);
+        [SerializeField] private float throwForce = 5;
         private GameScreenUIView _gameScreenUIView;
-        [Inject] private Camera _camera;
-        //[SerializeField] private EmptyHand hand;
-        [SerializeField] private Transform handPosition;
-        private float _throwForce = 5;
-        private Item _currentItem;
+        private Camera _camera;
+        private Item _item;
 
-        public void Initialize(GameScreenUIView gameScreenUIView)
+        public void Initialize(GameScreenUIView gameScreenUIView, Camera camera)
         {
             _gameScreenUIView = gameScreenUIView;
-            _camera = Camera.main;                                  //TODO Камера!!!!!!!!!
-            handPosition.transform.parent = _camera.transform;
-            _currentItem = handPosition.GetComponentInChildren<Smartphone>();
-            _currentItem.Grab(handPosition);
-            // _gameScreenUIView.grabButton.onClick.RemoveListener(() => GrabItem(_currentItem));
-            // _gameScreenUIView.grabButton.gameObject.SetActive(false);
+            _camera = camera;                            
+            hand.parent = _camera.transform;
+            hand.localPosition = handPosition;
+            _item = hand.GetComponentInChildren<Smartphone>();
+            _item.Grab(hand);
+            _gameScreenUIView.interactButton.gameObject.SetActive(false);
             _gameScreenUIView.dropButton.gameObject.SetActive(true);
-            _gameScreenUIView.dropButton.onClick.AddListener(() => ThrowItem(_currentItem));
+            _gameScreenUIView.dropButton.onClick.AddListener(ThrowItem);
         }
         
         public void GrabItem(Item item)
         {
             if (item != null)
             {
-                if (_currentItem != null)
-                    ThrowItem(_currentItem);
-                _currentItem = item;
-                _currentItem.Grab(handPosition);
-                _gameScreenUIView.interactButton.onClick.RemoveListener(() => GrabItem(_currentItem));
+                if (_item != null)
+                    ThrowItem();
+                _item = item;
+                _item.Grab(hand);
+                _gameScreenUIView.interactButton.onClick.RemoveAllListeners();
                 _gameScreenUIView.interactButton.gameObject.SetActive(false);
                 _gameScreenUIView.dropButton.gameObject.SetActive(true);
-                _gameScreenUIView.dropButton.onClick.AddListener(() => ThrowItem(_currentItem));
+                _gameScreenUIView.dropButton.onClick.AddListener(ThrowItem);
             }
         }
 
-        public void ThrowItem(Item item)
+        public void ThrowItem()
         {
-            _gameScreenUIView.dropButton.onClick.RemoveListener(() => ThrowItem(_currentItem));
+            _gameScreenUIView.dropButton.onClick.RemoveListener(ThrowItem);
             _gameScreenUIView.dropButton.gameObject.SetActive(false);
-            _currentItem.Throw();
+            _item.Throw(throwForce);
+            _item = null;
         }
     }
 }

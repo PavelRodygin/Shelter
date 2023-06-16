@@ -2,30 +2,31 @@ using System;
 using DG.Tweening;
 using UIModules.GameScreen.Scripts;
 using UnityEngine;
-using Zenject;
 
 namespace GameScripts.PlayerScripts
 {
     [RequireComponent(typeof(CharacterController))]
     public class PlayerMoveModule : MonoBehaviour
     {
-        [Inject] private Camera _camera;
         [SerializeField] private LayerMask groundMask;
         [SerializeField] private Transform groundCheck;
-        [SerializeField] private float maxWalkSpeed = 10;
+        [SerializeField] private float playerStandHeight = 2f;
+        [SerializeField] private float playerCrouchHeight = 0.9f;
+        [SerializeField] private float maxWalkSpeed = 5;
         [SerializeField] private float sensitivity = 5;
-        private GameScreenUIView _gameScreenUIView;
         private CharacterController _characterController;
+        private GameScreenUIView _gameScreenUIView;
+        private Camera _camera;
         private Joystick _joystick;
         private Vector3 _moveDirection;
         private Vector3 _velocity;
         private Vector2 _lookInput;
-        private Vector3 _cameraStandPosition = new Vector3(0, 1.6f, 0f);
-        private Vector3 _cameraCrouchPosition = new Vector3(0f,0.4f,0f);
-        private const float PlayerHeight = 2f;
+        private readonly Vector3 _cameraStandPosition = new(0, 1.6f, 0f);
+        private readonly Vector3 _cameraCrouchPosition = new(0f,0.4f,0f);
         private bool _isGrounded;
         private float _groundDistance = 0.4f;
-        private float _gravity = -10f;
+        private float _gravity = 10f;
+        private float _raycastYPos;
         private bool _isCrouching;
         private float _currentWalkSpeed;
         private float _cameraPitch;
@@ -34,15 +35,16 @@ namespace GameScripts.PlayerScripts
         
         public bool IsAlive { get; set; }
 
-        public void Initialize(GameScreenUIView gameScreenUIView)
+        public void Initialize(GameScreenUIView gameScreenUIView, Camera camera)
         {
-            _camera = Camera.main;                      //TODO Камера берётся из попы!
+            _camera = camera;                   
             _gameScreenUIView = gameScreenUIView;
             _characterController = GetComponent<CharacterController>();
             _joystick = _gameScreenUIView.walkJoystick;
             _rightFingerID = -1;
-            _gameScreenUIView.crouchButton.onClick.AddListener(CrouchGetUp);
             _currentWalkSpeed = maxWalkSpeed;
+            _raycastYPos = playerStandHeight - playerCrouchHeight + 0.1f;
+            _gameScreenUIView.crouchButton.onClick.AddListener(CrouchGetUp);
         }
 
         private void Update()
@@ -53,7 +55,7 @@ namespace GameScripts.PlayerScripts
         private void FixedUpdate()
         {
             Walk();
-            Gravity();
+            //Gravity();
             if (_rightFingerID != -1)
                 LookAround();
         }
@@ -106,9 +108,10 @@ namespace GameScripts.PlayerScripts
         private void Gravity()
         {
             _isGrounded = Physics.CheckSphere(groundCheck.position, _groundDistance, groundMask);
-            if (_isGrounded && _velocity.y < 0)
-                _velocity.y = -2f;
-            _velocity.y += _gravity * Time.deltaTime * Time.deltaTime;
+            if (_isGrounded)
+                _velocity.y = -0.2f;
+            else
+                _velocity.y -= _gravity * Time.deltaTime * Time.deltaTime;
             _characterController.Move(_velocity);
         }
         
@@ -128,17 +131,17 @@ namespace GameScripts.PlayerScripts
             if (_characterController.isGrounded && !_isCrouching)
             {
                 _isCrouching = true;
-                _characterController.height = 0.8f;
+                var pos = transform.position;
+                _characterController.height = playerCrouchHeight;
+                transform.position = pos;
                 _camera.transform.DOLocalMove(_cameraCrouchPosition, 0.25f);
-                //_camera.transform.localPosition = _cameraCrouchPosition;
                 _currentWalkSpeed = maxWalkSpeed / 2;
             }
-            else if (!Physics.Raycast(transform.position, transform.TransformDirection(Vector3.up)))
+            else if (!Physics.Raycast(transform.localPosition+new Vector3(0f,_raycastYPos,0f), transform.TransformDirection(Vector3.up), playerStandHeight-playerCrouchHeight))
             {
                 _isCrouching = false;
-                _characterController.height = 2f;
-                _camera.transform.DOLocalMove(_cameraCrouchPosition, 0.25f);
-                //_camera.transform.localPosition = _cameraCrouchPosition;
+                _characterController.height = playerStandHeight;
+                _camera.transform.DOLocalMove(_cameraStandPosition, 0.25f);
                 _currentWalkSpeed = maxWalkSpeed;
             }
         }

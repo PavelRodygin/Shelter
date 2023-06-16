@@ -65,6 +65,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rigidBody: {fileID: 5181978648178924730}
+  physicCollider: {fileID: 3427944221956319873}
+  triggerCollider: {fileID: 3809167121611066857}
 --- !u!135 &3809167121611066857
 SphereCollider:
   m_ObjectHideFlags: 0

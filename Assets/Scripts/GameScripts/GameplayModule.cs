@@ -6,14 +6,16 @@ using GameScripts.PlayerScripts;
 using Interfaces;
 using UIModules.GameScreen.Scripts;
 using UnityEngine;
+using Zenject;
 
 namespace GameScripts
 {
     public class GameplayModule : MonoBehaviour
     {
+        [Inject] private Camera _camera;
         [SerializeField] private GameObject levelWalls;
         [SerializeField] private Core.AbstractClasses.OpenClosable door;
-        [SerializeField] private List<Breakable> breakables = new();  
+        [SerializeField] private List<Breakable> _breakables = new();  
         [SerializeField] private float breakingTime = 20000f;
         [SerializeField] private float breakTimeMultiplier = 1.2f;
         [SerializeField] private float fadeTime = 0.5f;
@@ -29,7 +31,7 @@ namespace GameScripts
         {
             _gameScreenUIView = gameScreenUIView;
             player = Instantiate(player, transform).GetComponent<Player>();
-            player.Initialize(gameScreenUIView);
+            player.Initialize(gameScreenUIView, _camera);
         }
 
         public async void StartGame()
@@ -47,7 +49,7 @@ namespace GameScripts
 
         private void GenerateLevel()
         {
-            player.transform.position = new Vector3(-0.3f, 1f, -5f);
+            player.transform.localPosition = new Vector3(-0.3f, 5f, -5f);
             levelWalls = Instantiate(levelWalls, transform);
             door = Instantiate(door, transform);
             door.transform.position = new Vector3(0f, 0.482f, 0f);
@@ -98,7 +100,6 @@ namespace GameScripts
 
         public void Show()
         {
-            //gameObject.SetActive(true); ?????
             GenerateLevel();
             player.MoveModule.OnPlayerInsideShelter += OnPlayerInsideShelter;
         }

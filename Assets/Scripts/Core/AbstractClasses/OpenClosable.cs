@@ -1,6 +1,5 @@
 using Core.GameInterfaces;
 using UnityEngine;
-using Zenject;
 
 namespace Core.AbstractClasses
 {
@@ -15,12 +14,8 @@ namespace Core.AbstractClasses
 
         public Transform PointToLook => pointToLook;
         public bool IsOpen { get; protected set; }
-        public bool IsInteractable
-        {
-            get => _isInteractable;
-            private set => _isInteractable = value;
-        }
-        
+        public bool IsInteractable => _isInteractable;
+
         protected virtual void Awake()
         {
             AnimController = GetComponent<Animator>();
@@ -28,23 +23,23 @@ namespace Core.AbstractClasses
 
         public virtual void OpenClose()
         {
-            if (_isOpen)
+            if (_isOpen && _isInteractable)
             {
                 AnimController.SetBool(Open, false);
-                IsInteractable = false;
+                _isInteractable = false;
                 _isOpen = false;
             }
-            else
+            else if (_isInteractable)
             {
                 AnimController.SetBool(Open, true);
-                IsInteractable = false;
+                _isInteractable = false;
                 _isOpen = true;
             }
         }
         
         public void IndicateOpenClose() //For anim controller
         {
-            IsInteractable = true; 
+            _isInteractable = true; 
         }
     }
 }

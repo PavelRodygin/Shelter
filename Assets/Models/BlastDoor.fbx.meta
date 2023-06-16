@@ -3,7 +3,12 @@ guid: 42013bbd0579da44fb1ebb3427702b8e
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ShelterWallsMaterial.001
+    second: {fileID: 2100000, guid: 1e985a8977c0fc549ab48918679be229, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
