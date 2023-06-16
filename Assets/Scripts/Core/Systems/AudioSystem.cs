@@ -7,24 +7,14 @@ namespace Core.Systems
     [RequireComponent(typeof(AudioSource))]
     public class AudioSystem : MonoBehaviour, IDataPersistence
     {
-        [SerializeField] private AudioClip mainMenuMelody;
         private AudioSource _musicAudioSource;
         public float MusicVolume { get; private set; }
         public float SoundsVolume { get; private set; }
 
         private void Awake() => _musicAudioSource = GetComponent<AudioSource>();
 
-        public void PlayMainMenuMelody()
-        {
-            _musicAudioSource.clip = mainMenuMelody;
-            _musicAudioSource.Play();
-        }
-
-        public void StopMainMenuMelody()
-        {
-            _musicAudioSource.Stop();
-            _musicAudioSource.clip = null;
-        }
+        public void PlayMainMenuMelody() => _musicAudioSource.Play();
+        public void StopMainMenuMelody() => _musicAudioSource.Stop();
 
         public void SetMusicVolume(float volume)
         {

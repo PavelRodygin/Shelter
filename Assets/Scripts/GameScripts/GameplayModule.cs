@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Core;
 using Core.Systems;
 using Core.Systems.DataPersistenceSystem;
 using Cysharp.Threading.Tasks;
@@ -19,11 +20,12 @@ namespace GameScripts
         [SerializeField] private GameObject levelWalls;
         [SerializeField] private Core.AbstractClasses.OpenClosable blastDoor;
         [SerializeField] private Core.AbstractClasses.OpenClosable blastHatch;
-        [SerializeField] private Core.AbstractClasses.Interactable FVM;  // Filter ventilation machine
+        [SerializeField] private Core.AbstractClasses.Interactable fvm;  // Filter ventilation machine
+        [SerializeField] private AudioSource siren;
         //[SerializeField] private float breakingTime = 20000f;
         //[SerializeField] private float breakTimeMultiplier = 1.2f;
         //public LevelScriptableObject[] levelScriptableObjects;
-        //private LevelScriptableObject _currentLevelScriptableObject;
+        private LevelScriptableObject _currentLevelScriptableObject;
         //private List<Breakable> _breakables = new();  
         [SerializeField] private float messageFadeTime = 0.5f;
         public Player player;
@@ -61,8 +63,8 @@ namespace GameScripts
             blastDoor.transform.position = new Vector3(0f, 0.482f, 0f);
             blastHatch = Instantiate(blastHatch, transform);
             blastHatch.transform.position = new Vector3(2f, 0.482f, 0f);
-            FVM = Instantiate(FVM, transform);
-            FVM.transform.position = new Vector3(-2f, 0.482f, 0f);
+            fvm = Instantiate(fvm, transform);
+            fvm.transform.position = new Vector3(-2f, 0.482f, 0f);
         }
 
         // private void DetonateBomb()
@@ -81,15 +83,15 @@ namespace GameScripts
             ShowGameMessage(messages).Forget();
         }
 
-        private async void BreakSomething()
-        {
+        //private async void BreakSomething()
+        //{
             // while (player.MoveModule.IsAlive)
             // {
             //     int index = Random.Range(0, breakable.Count); 
             //     //breakables[index]Break();
             //     await UniTask.Delay((int)(breakingTime * breakTimeMultiplier));
             // }
-        }
+        //}
         
         private async UniTask ShowGameMessage(Dictionary<string, int> messages)
         {

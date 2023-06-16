@@ -10,8 +10,8 @@ namespace GameScripts.PlayerScripts
     {
         [SerializeField] private LayerMask groundMask;
         [SerializeField] private Transform groundCheck;
-        [SerializeField] private float playerStandHeight = 2f;
-        [SerializeField] private float playerCrouchHeight = 0.9f;
+        [SerializeField] private float playerStandHeight = 1.8f;
+        [SerializeField] private float playerCrouchHeight = 0.4f;
         [SerializeField] private float maxWalkSpeed = 5;
         [SerializeField] private float sensitivity = 5;
         private CharacterController _characterController;
@@ -21,12 +21,11 @@ namespace GameScripts.PlayerScripts
         private Vector3 _moveDirection;
         private Vector3 _velocity;
         private Vector2 _lookInput;
-        private readonly Vector3 _cameraStandPosition = new(0, 1.6f, 0f);
-        private readonly Vector3 _cameraCrouchPosition = new(0f,0.4f,0f);
+        private Vector3 _cameraStandPosition;
+        private Vector3 _cameraCrouchPosition;
         private bool _isGrounded;
         private float _groundDistance = 0.4f;
         private float _gravity = 10f;
-        private float _raycastYPos;
         private bool _isCrouching;
         private float _currentWalkSpeed;
         private float _cameraPitch;
@@ -38,20 +37,19 @@ namespace GameScripts.PlayerScripts
         public void Initialize(GameScreenUIView gameScreenUIView, Camera camera)
         {
             _camera = camera;
-            _camera.transform.position = _cameraStandPosition;
+            _cameraStandPosition = new Vector3(0f, playerStandHeight - 0.1f, 0f);
+            _cameraCrouchPosition = new Vector3(0f, playerCrouchHeight, 0f);
             _camera.transform.localPosition = _cameraStandPosition;
             _gameScreenUIView = gameScreenUIView;
             _characterController = GetComponent<CharacterController>();
             _joystick = _gameScreenUIView.walkJoystick;
             _rightFingerID = -1;
             _currentWalkSpeed = maxWalkSpeed;
-            _raycastYPos = playerStandHeight - playerCrouchHeight + 0.1f;
             _gameScreenUIView.crouchButton.onClick.AddListener(CrouchGetUp);
         }
 
         private void Update()
         {
-            _camera.transform.localPosition = _cameraStandPosition;
             GetTouchInput();
         }
 
@@ -135,29 +133,19 @@ namespace GameScripts.PlayerScripts
             {
                 _isCrouching = true;
                 _characterController.height = playerCrouchHeight;
+                _characterController.center = new Vector3(0f, playerCrouchHeight/2, 0f);
                 _camera.transform.DOLocalMove(_cameraCrouchPosition, 0.25f);
                 _currentWalkSpeed = maxWalkSpeed / 2;
             }
-            else if (!Physics.Raycast(transform.position+new Vector3(0f,_raycastYPos,0f), transform.TransformDirection(Vector3.up), playerStandHeight-playerCrouchHeight))
+            else if (!Physics.Raycast(transform.position, transform.TransformDirection(Vector3.up), playerStandHeight))
             {
                 _isCrouching = false;
                 _characterController.height = playerStandHeight;
+                _characterController.center = new Vector3(0f, playerStandHeight/2, 0f);
                 _camera.transform.DOLocalMove(_cameraStandPosition, 0.25f);
                 _currentWalkSpeed = maxWalkSpeed;
             }
         }
-
-        // private void GetUp()
-        // {
-        //     RaycastHit hit;
-        //     bool wallUpHead = Physics.Raycast(transform.position, transform.TransformDirection(Vector3.up),
-        //         out hit, PlayerHeight);
-        //     if (_characterController.isGrounded && !wallUpHead)
-        //     {
-        //         _camera.transform.localPosition = new Vector3(0, PlayerHeight - 0.05f, 0);
-        //         _currentWalkSpeed = maxWalkSpeed;
-        //     }
-        // }
 
         private void OnTriggerEnter(Collider other)
         {

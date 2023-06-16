@@ -1,5 +1,6 @@
 using Core.AbstractClasses;
 using Core.GameInterfaces;
+using Cysharp.Threading.Tasks;
 using UIModules.GameScreen.Scripts;
 using UnityEngine;
 
@@ -26,7 +27,7 @@ namespace GameScripts.PlayerScripts
         private void Update()
         {
             if (_currentDoor != null)
-            {         
+            {
                 OpenClose();
             }
             else if (_currentInteractable != null)
@@ -39,12 +40,15 @@ namespace GameScripts.PlayerScripts
             }
         }
 
-        private void OpenClose()
+        private async void OpenClose()
         {
             if(!_interactButtonShowed && CheckLookToObject(_currentDoor.PointToLook))               
             {
+                while (!_currentDoor.IsInteractable)
+                    await UniTask.Yield();
                 _gameScreenUIView.interactButton.gameObject.SetActive(true);
                 _interactButtonShowed = true;
+                
             }
             else if (!CheckLookToObject(_currentDoor.PointToLook)) 
             {
