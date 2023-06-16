@@ -27,17 +27,14 @@ namespace GameScripts.PlayerScripts
         {
             if (_currentDoor != null)
             {         
-                print("OpenClose");
                 OpenClose();
             }
             else if (_currentInteractable != null)
             {
-                print("Interact");
                 Interact();
             }
             else if (_currentItem != null)
             {
-                print("FindItem");
                 FindItem();
             }
         }

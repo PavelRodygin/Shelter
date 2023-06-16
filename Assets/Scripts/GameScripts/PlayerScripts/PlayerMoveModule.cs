@@ -134,10 +134,7 @@ namespace GameScripts.PlayerScripts
             if (_characterController.isGrounded && !_isCrouching)
             {
                 _isCrouching = true;
-                var pos = transform.position;
                 _characterController.height = playerCrouchHeight;
-                transform.position = pos;
-                Debug.Log(_characterController.height);
                 _camera.transform.DOLocalMove(_cameraCrouchPosition, 0.25f);
                 _currentWalkSpeed = maxWalkSpeed / 2;
             }
@@ -161,6 +158,14 @@ namespace GameScripts.PlayerScripts
         //         _currentWalkSpeed = maxWalkSpeed;
         //     }
         // }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.transform.parent.GetComponent<ShelterZone>())
+            {
+                OnPlayerInsideShelter?.Invoke();
+            }
+        }
 
         private void OnDisable()
         {

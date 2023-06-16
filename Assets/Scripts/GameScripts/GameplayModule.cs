@@ -20,7 +20,6 @@ namespace GameScripts
         [SerializeField] private Core.AbstractClasses.OpenClosable blastDoor;
         [SerializeField] private Core.AbstractClasses.OpenClosable blastHatch;
         [SerializeField] private Core.AbstractClasses.Interactable FVM;  // Filter ventilation machine
-
         //[SerializeField] private float breakingTime = 20000f;
         //[SerializeField] private float breakTimeMultiplier = 1.2f;
         //public LevelScriptableObject[] levelScriptableObjects;

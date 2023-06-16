@@ -46,7 +46,7 @@ namespace GameScripts.PlayerScripts
         {
             _gameScreenUIView.dropButton.onClick.RemoveListener(ThrowItem);
             _gameScreenUIView.dropButton.gameObject.SetActive(false);
-            _item.Throw(throwForce);
+            _item.Throw(_camera.transform.forward.normalized * throwForce);
             _item = null;
         }
     }

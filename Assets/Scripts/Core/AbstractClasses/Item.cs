@@ -26,7 +26,7 @@ namespace Core.AbstractClasses
             transform1.localPosition = Vector3.zero;
         }
         
-        public virtual async void Throw(float throwForce) 
+        public virtual async void Throw(Vector3 force) 
         {
             rigidBody.isKinematic = false;
             rigidBody.useGravity = true;
@@ -35,7 +35,7 @@ namespace Core.AbstractClasses
             for (int i = 0; i < LevelsToMoveUp && parent != null; i++)
                 parent = parent.parent;
             transform.SetParent(parent);
-            rigidBody.AddForce(0f, 0f, throwForce, ForceMode.Impulse);
+            rigidBody.AddForce(force, ForceMode.Impulse);
             await UniTask.Delay(500);
             triggerCollider.enabled = true;
         }
