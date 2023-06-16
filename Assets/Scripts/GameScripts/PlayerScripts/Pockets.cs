@@ -8,7 +8,6 @@ namespace GameScripts.PlayerScripts
     public class Pockets : MonoBehaviour
     {
         [SerializeField] private Transform hand;
-        [SerializeField] private Vector3 handPosition = new(0.3f, -0.2f, 0.5f);
         [SerializeField] private float throwForce = 5;
         private GameScreenUIView _gameScreenUIView;
         private Camera _camera;
@@ -17,9 +16,10 @@ namespace GameScripts.PlayerScripts
         public void Initialize(GameScreenUIView gameScreenUIView, Camera camera)
         {
             _gameScreenUIView = gameScreenUIView;
-            _camera = camera;                            
+            _camera = camera;
+            var handStockPos = hand.transform.localPosition;
             hand.parent = _camera.transform;
-            hand.localPosition = handPosition;
+            hand.localPosition = handStockPos;
             _item = hand.GetComponentInChildren<Smartphone>();
             _item.Grab(hand);
             _gameScreenUIView.interactButton.gameObject.SetActive(false);

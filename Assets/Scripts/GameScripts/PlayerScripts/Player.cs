@@ -13,7 +13,7 @@ namespace GameScripts.PlayerScripts
         private PlayerInteractModule _interactModule;
         private Pockets _pockets;   // Controls item's taking and dropping;
         private Camera _camera;
-        private Vector3 _stockCameraPosition;
+        private Vector3 _stockCameraPosition = Vector3.zero;
         private bool _isAlive;
         
         public bool IsAlive { get; private set; }
@@ -43,8 +43,6 @@ namespace GameScripts.PlayerScripts
             _camera = camera;
             _camera.orthographic = false;
             _camera.transform.parent = transform;
-            _stockCameraPosition = _camera.gameObject.transform.position;
-            _camera.transform.position = _cameraStandPosition;
         }
 
         public void Hide()

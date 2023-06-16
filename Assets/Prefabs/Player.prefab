@@ -42,7 +42,6 @@ GameObject:
   - component: {fileID: 4421087399496044286}
   - component: {fileID: 4421087399490210622}
   - component: {fileID: 4856217464604320433}
-  - component: {fileID: 2748101201633722020}
   - component: {fileID: 6365008128500910028}
   - component: {fileID: 8521867465221180063}
   - component: {fileID: 1752349208799935427}
@@ -185,20 +184,6 @@ CharacterController:
   m_SkinWidth: 0.02
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
---- !u!136 &2748101201633722020
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4421087399496209118}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &6365008128500910028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,7 +209,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minLookCosine: 0.9
-  currentItem: {fileID: 6033069405629551322}
 --- !u!114 &1752349208799935427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -371,14 +355,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5181978648178924728, guid: 08708cc5f1951ff47aecff0e0aa5a6a5, type: 3}
   m_PrefabInstance: {fileID: 700504300431488370}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6033069405629551322 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6485592876021032872, guid: 08708cc5f1951ff47aecff0e0aa5a6a5, type: 3}
-  m_PrefabInstance: {fileID: 700504300431488370}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c1ec30e33bd3ce49afed2ecf21e6368, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

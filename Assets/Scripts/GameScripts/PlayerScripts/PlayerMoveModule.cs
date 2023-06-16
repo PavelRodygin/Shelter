@@ -37,7 +37,9 @@ namespace GameScripts.PlayerScripts
 
         public void Initialize(GameScreenUIView gameScreenUIView, Camera camera)
         {
-            _camera = camera;                   
+            _camera = camera;
+            _camera.transform.position = _cameraStandPosition;
+            _camera.transform.localPosition = _cameraStandPosition;
             _gameScreenUIView = gameScreenUIView;
             _characterController = GetComponent<CharacterController>();
             _joystick = _gameScreenUIView.walkJoystick;
@@ -49,13 +51,14 @@ namespace GameScripts.PlayerScripts
 
         private void Update()
         {
+            _camera.transform.localPosition = _cameraStandPosition;
             GetTouchInput();
         }
 
         private void FixedUpdate()
         {
             Walk();
-            //Gravity();
+            Gravity();
             if (_rightFingerID != -1)
                 LookAround();
         }
@@ -134,10 +137,11 @@ namespace GameScripts.PlayerScripts
                 var pos = transform.position;
                 _characterController.height = playerCrouchHeight;
                 transform.position = pos;
+                Debug.Log(_characterController.height);
                 _camera.transform.DOLocalMove(_cameraCrouchPosition, 0.25f);
                 _currentWalkSpeed = maxWalkSpeed / 2;
             }
-            else if (!Physics.Raycast(transform.localPosition+new Vector3(0f,_raycastYPos,0f), transform.TransformDirection(Vector3.up), playerStandHeight-playerCrouchHeight))
+            else if (!Physics.Raycast(transform.position+new Vector3(0f,_raycastYPos,0f), transform.TransformDirection(Vector3.up), playerStandHeight-playerCrouchHeight))
             {
                 _isCrouching = false;
                 _characterController.height = playerStandHeight;
