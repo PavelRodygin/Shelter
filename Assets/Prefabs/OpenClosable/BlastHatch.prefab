@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 814766909436589864}
   - component: {fileID: 7090725762886832880}
   - component: {fileID: 1240531186420124212}
+  - component: {fileID: 6245485971623290794}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -84,6 +85,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6245485971623290794
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4200291461769533818}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.90000004, y: 0.90000033, z: 0.077999964}
+  m_Center: {x: 0.4219409, y: -0.07948315, z: -0.0033332184}
 --- !u!1 &4493163337120956483
 GameObject:
   m_ObjectHideFlags: 0
@@ -95,6 +109,9 @@ GameObject:
   - component: {fileID: 3823904161885788921}
   - component: {fileID: 197849446847354204}
   - component: {fileID: 2691481662625735062}
+  - component: {fileID: 1810411890314068915}
+  - component: {fileID: 2748152909315162414}
+  - component: {fileID: 1935266365738179861}
   m_Layer: 0
   m_Name: BlastHatch
   m_TagString: Untagged
@@ -168,6 +185,53 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!95 &1810411890314068915
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4493163337120956483}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: b1fa4a53b9291814ba83497adcbd005c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &2748152909315162414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4493163337120956483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab9eed93ca7097149b848c1cfc4b264e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointToLook: {fileID: 4388673707013054883}
+--- !u!64 &1935266365738179861
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4493163337120956483}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -283076361638139976, guid: fa833ae5b72e48a43bc443f14fa24f4a, type: 3}
 --- !u!1 &5807577336362604680
 GameObject:
   m_ObjectHideFlags: 0

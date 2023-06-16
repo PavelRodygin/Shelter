@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Core.Controllers;
 using UIModules.GameScreen.Scripts;
 using UIModules.MainMenu.Scripts;
-using UIModules.SettingsScreen.Scripts;
-using UnityEngine;
 using Zenject;
 
 namespace Start
@@ -20,7 +18,6 @@ namespace Start
             _map = new Dictionary<ControllerMap, Type>
             {
                 { ControllerMap.MainMenu, typeof(MainMenuController)},
-                { ControllerMap.Settings, typeof(SettingsController)},
                 { ControllerMap.GameScreen, typeof(GameScreenController)},
             };
         }

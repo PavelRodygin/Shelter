@@ -5,10 +5,9 @@ namespace UIModules.MainMenu.Scripts
 {
     public class MainMenuUIView : UIView
     {
-        public Button startGameButton;
+        public SettingsPopup settingsPopup;
+        public Button playButton;
         public Button settingsButton;
-        //public Button infoButton;
-        public Button exitButton;
-        //public Button shopButton;
+        public Button quitButton;
     }
 }

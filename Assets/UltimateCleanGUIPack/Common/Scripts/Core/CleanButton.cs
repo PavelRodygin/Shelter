@@ -14,20 +14,20 @@ namespace UltimateCleanGUIPack.Common.Scripts.Core
     /// </summary>
     public class CleanButton : Button
     {
-        private ButtonSounds buttonSounds;
+        private UiltimateCleanButtonSounds _uiltimateCleanButtonSounds;
         private bool pointerWasUp;
 
         protected override void Awake()
         {
             base.Awake();
-            buttonSounds = GetComponent<ButtonSounds>();
+            _uiltimateCleanButtonSounds = GetComponent<UiltimateCleanButtonSounds>();
         }
 
         public override void OnPointerClick(PointerEventData eventData)
         {
-            if (buttonSounds != null && interactable)
+            if (_uiltimateCleanButtonSounds != null && interactable)
             {
-                buttonSounds.PlayPressedSound();
+                _uiltimateCleanButtonSounds.PlayPressedSound();
             }
             base.OnPointerClick(eventData);
         }
@@ -47,9 +47,9 @@ namespace UltimateCleanGUIPack.Common.Scripts.Core
             }
             else
             {
-                if (buttonSounds != null && interactable)
+                if (_uiltimateCleanButtonSounds != null && interactable)
                 {
-                    buttonSounds.PlayRolloverSound();
+                    _uiltimateCleanButtonSounds.PlayRolloverSound();
                 }
                 base.OnPointerEnter(eventData);
             }
