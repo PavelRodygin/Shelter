@@ -15,8 +15,7 @@ namespace GameScripts
     public class GameplayModule : MonoBehaviour, IDataPersistence
     {
         [Inject] private Camera _camera;
-        [Inject] private AudioSystem _audioSystem;
-        
+        //[Inject] private AudioSystem _audioSystem;
         //[SerializeField] LevelScriptableObject[] levelScriptableObjects;
         [SerializeField] private GameObject levelWalls;
         [SerializeField] private Core.AbstractClasses.OpenClosable blastDoor;
@@ -32,7 +31,7 @@ namespace GameScripts
         private GameScreenUIView _gameScreenUIView;
         private IBreakable _currentBroken;
         private bool _surviveStarted;
-        private bool _allIsFine = true;
+        //private bool _allIsFine = true;
 
         public void Initialize(GameScreenUIView gameScreenUIView)
         {
