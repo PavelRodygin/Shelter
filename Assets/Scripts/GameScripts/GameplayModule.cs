@@ -17,14 +17,14 @@ namespace GameScripts
         [Inject] private Camera _camera;
         [Inject] private AudioSystem _audioSystem;
         
+        //[SerializeField] LevelScriptableObject[] levelScriptableObjects;
         [SerializeField] private GameObject levelWalls;
         [SerializeField] private Core.AbstractClasses.OpenClosable blastDoor;
         [SerializeField] private Core.AbstractClasses.OpenClosable blastHatch;
         [SerializeField] private Core.AbstractClasses.Interactable fvm;  // Filter ventilation machine
-        [SerializeField] private AudioSource siren;
+        //[SerializeField] private AudioSource siren;
         //[SerializeField] private float breakingTime = 20000f;
         //[SerializeField] private float breakTimeMultiplier = 1.2f;
-        //public LevelScriptableObject[] levelScriptableObjects;
         private LevelScriptableObject _currentLevelScriptableObject;
         //private List<Breakable> _breakables = new();  
         [SerializeField] private float messageFadeTime = 0.5f;

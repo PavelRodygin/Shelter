@@ -908,6 +908,6 @@ MonoBehaviour:
   levelWalls: {fileID: 8022402947195926254, guid: deb092afc7377e44daf7c16b14919356, type: 3}
   blastDoor: {fileID: 9155128319605080837, guid: 24d5e403362e11d4899f7a50d6f8e275, type: 3}
   blastHatch: {fileID: 2748152909315162414, guid: 6e307931981da0f41971a07278fac79a, type: 3}
-  FVM: {fileID: 5002767585398050818, guid: 2008cffbb995d914dbfeae4bed7cab6b, type: 3}
+  fvm: {fileID: 5002767585398050818, guid: 2008cffbb995d914dbfeae4bed7cab6b, type: 3}
   messageFadeTime: 0.5
   player: {fileID: 6365008128500910028, guid: 379dd8b397ca39546ac98dbb8490fec6, type: 3}

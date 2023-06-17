@@ -44,11 +44,10 @@ namespace GameScripts.PlayerScripts
         {
             if(!_interactButtonShowed && CheckLookToObject(_currentDoor.PointToLook))               
             {
-                while (!_currentDoor.IsInteractable)
+                while (_currentDoor != null && _currentDoor.IsInteractable == false)
                     await UniTask.Yield();
                 _gameScreenUIView.interactButton.gameObject.SetActive(true);
                 _interactButtonShowed = true;
-                
             }
             else if (!CheckLookToObject(_currentDoor.PointToLook)) 
             {
