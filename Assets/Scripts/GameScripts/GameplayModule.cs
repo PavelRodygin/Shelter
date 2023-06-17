@@ -57,14 +57,13 @@ namespace GameScripts
 
         private void GenerateLevel()
         {
-            player.transform.localPosition = new Vector3(-0.3f, 5f, -5f);
             levelWalls = Instantiate(levelWalls, transform);
             blastDoor = Instantiate(blastDoor, transform);
-            blastDoor.transform.position = new Vector3(0f, 0.482f, 0f);
+            blastDoor.transform.position = new Vector3(0f, 0.482f, 3f);
             blastHatch = Instantiate(blastHatch, transform);
-            blastHatch.transform.position = new Vector3(2f, 0.482f, 0f);
+            blastHatch.transform.position = new Vector3(2f, 0.482f, 3f);
             fvm = Instantiate(fvm, transform);
-            fvm.transform.position = new Vector3(-2f, 0.482f, 0f);
+            fvm.transform.position = new Vector3(-2f, 0.482f, 3f);
         }
 
         // private void DetonateBomb()
