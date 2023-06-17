@@ -59,7 +59,7 @@ namespace UIModules.MainMenu.Scripts
             _mainMenuUIView.settingsPopup.gameObject.SetActive(true);
             _mainMenuUIView.settingsPopup.musicVolumeSlider.value = _audioSystem.MusicVolume;
             _mainMenuUIView.settingsPopup.soundsVolumeSlider.value = _audioSystem.SoundsVolume;
-            _mainMenuUIView.settingsPopup.sensitivitySlider.value = _gameplayModule.cameraSensitivity;
+            _mainMenuUIView.settingsPopup.sensitivitySlider.value = _gameplayModule.CameraSensitivity;
             await _mainMenuUIView.settingsPopup.Show();
         }
         
@@ -121,19 +121,13 @@ namespace UIModules.MainMenu.Scripts
             }
         }
         
-        private void ChangeSensitivitySlider(float sensitivity)
-        {
-            _gameplayModule.cameraSensitivity = sensitivity;
-        }
-        
+        private void ChangeSensitivitySlider(float sensitivity) => _gameplayModule.CameraSensitivity = sensitivity;
+
         private async void HideSettingsPopup() => await _mainMenuUIView.settingsPopup.Hide();
         
         #endregion
         
-        public async UniTask Stop()
-        {
-            await _mainMenuUIView.Hide();
-        }
+        public async UniTask Stop() => await _mainMenuUIView.Hide();
 
         public void Dispose()   
         {

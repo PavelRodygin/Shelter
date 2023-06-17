@@ -28,17 +28,18 @@ namespace GameScripts
         //private List<Breakable> _breakables = new();  
         [SerializeField] private float messageFadeTime = 0.5f;
         [SerializeField] private Player player;
-        public float cameraSensitivity;
         private GameScreenUIView _gameScreenUIView;
         private IBreakable _currentBroken;
         private bool _surviveStarted;
         //private bool _allIsFine = true;
 
+        public float CameraSensitivity { get; set; }
+
         public void Initialize(GameScreenUIView gameScreenUIView)
         {
             _gameScreenUIView = gameScreenUIView;
             player = Instantiate(player, transform).GetComponent<Player>();
-            player.Initialize(gameScreenUIView, _camera, cameraSensitivity);
+            player.Initialize(gameScreenUIView, _camera, CameraSensitivity);
         }
 
         public async void StartGame()
@@ -134,12 +135,12 @@ namespace GameScripts
         
         public void LoadData(GameData gameData)
         {
-            cameraSensitivity = gameData.CameraSensitivity;
+            CameraSensitivity = gameData.CameraSensitivity;
         }
 
         public void SaveData(ref GameData gameData)
         {
-            gameData.CameraSensitivity = cameraSensitivity;
+            gameData.CameraSensitivity = CameraSensitivity;
         }
     }
 }
