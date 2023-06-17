@@ -131,8 +131,7 @@ MonoBehaviour:
   groundCheck: {fileID: 6619002863710374553}
   playerStandHeight: 1.8
   playerCrouchHeight: 0.4
-  maxWalkSpeed: 5
-  sensitivity: 5
+  maxWalkSpeed: 3
 --- !u!114 &9170122615321204518
 MonoBehaviour:
   m_ObjectHideFlags: 0

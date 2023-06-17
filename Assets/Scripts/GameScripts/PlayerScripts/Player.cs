@@ -32,12 +32,12 @@ namespace GameScripts.PlayerScripts
             set => _interactModule = value;
         }
 
-        public void Initialize(GameScreenUIView gameScreenUIView, Camera camera)
+        public void Initialize(GameScreenUIView gameScreenUIView, Camera camera, float sensitivity)
         {
             _moveModule = GetComponent<PlayerMoveModule>();
             _interactModule = GetComponent<PlayerInteractModule>();
             _pockets = GetComponent<Pockets>();
-            _moveModule.Initialize(gameScreenUIView, camera);
+            _moveModule.Initialize(gameScreenUIView, camera, sensitivity);
             _interactModule.Initialize(gameScreenUIView, camera);
             _pockets.Initialize(gameScreenUIView, camera);
             _camera = camera;

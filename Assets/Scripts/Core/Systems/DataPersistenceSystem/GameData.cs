@@ -4,15 +4,13 @@
     {
         public float SoundsVolume;
         public float MusicVolume;
-        public byte Level;
-        public ushort Score;
+        public float CameraSensitivity;
 
         public GameData()
         {
             SoundsVolume = 0.5f;
             MusicVolume = 0.5f;
-            Level = 0;
-            Score = 0;
+            CameraSensitivity = 5;
         }
     }
 }

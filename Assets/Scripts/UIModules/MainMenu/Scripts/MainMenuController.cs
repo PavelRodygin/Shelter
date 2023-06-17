@@ -2,6 +2,7 @@
 using Core.Controllers;
 using Core.Systems;
 using Cysharp.Threading.Tasks;
+using GameScripts;
 using UnityEngine;
 
 namespace UIModules.MainMenu.Scripts
@@ -10,15 +11,18 @@ namespace UIModules.MainMenu.Scripts
     {
         private readonly IRootController _rootController;
         private readonly AudioSystem _audioSystem;
+        private readonly GameplayModule _gameplayModule;
         private readonly MainMenuUIView _mainMenuUIView;
         private readonly UniTaskCompletionSource<Action> _completionSource;
 
-        public MainMenuController(IRootController rootController, MainMenuUIView mainMenuUIView, AudioSystem audioSystem)
+        public MainMenuController(IRootController rootController, MainMenuUIView mainMenuUIView, AudioSystem audioSystem,
+            GameplayModule gameplayModule)
         {
             _rootController = rootController;
             _mainMenuUIView = mainMenuUIView;
             _mainMenuUIView.gameObject.SetActive(false);    
             _audioSystem = audioSystem;
+            _gameplayModule = gameplayModule;
             _completionSource = new UniTaskCompletionSource<Action>();
         }
         
@@ -39,6 +43,7 @@ namespace UIModules.MainMenu.Scripts
             _mainMenuUIView.settingsPopup.musicVolumeSlider.onValueChanged.AddListener(ChangeMusicVolumeSlider);
             _mainMenuUIView.settingsPopup.soundsSwitch.OnSwitchToggled += OnSoundsSwitchToggled;
             _mainMenuUIView.settingsPopup.soundsVolumeSlider.onValueChanged.AddListener(ChangeSoundsVolumeSlider);
+            _mainMenuUIView.settingsPopup.sensitivitySlider.onValueChanged.AddListener(ChangeSensitivitySlider);
             _mainMenuUIView.playButton.onClick.AddListener(PlayButtonClicked);
             _mainMenuUIView.quitButton.onClick.AddListener(ExitButtonClicked);
         }
@@ -54,6 +59,7 @@ namespace UIModules.MainMenu.Scripts
             _mainMenuUIView.settingsPopup.gameObject.SetActive(true);
             _mainMenuUIView.settingsPopup.musicVolumeSlider.value = _audioSystem.MusicVolume;
             _mainMenuUIView.settingsPopup.soundsVolumeSlider.value = _audioSystem.SoundsVolume;
+            _mainMenuUIView.settingsPopup.sensitivitySlider.value = _gameplayModule.cameraSensitivity;
             await _mainMenuUIView.settingsPopup.Show();
         }
         
@@ -113,6 +119,11 @@ namespace UIModules.MainMenu.Scripts
                     _mainMenuUIView.settingsPopup.soundsSwitch.Toggle();  //Disable switch
                 _audioSystem.SetSoundsVolume(0);
             }
+        }
+        
+        private void ChangeSensitivitySlider(float sensitivity)
+        {
+            _gameplayModule.cameraSensitivity = sensitivity;
         }
         
         private async void HideSettingsPopup() => await _mainMenuUIView.settingsPopup.Hide();

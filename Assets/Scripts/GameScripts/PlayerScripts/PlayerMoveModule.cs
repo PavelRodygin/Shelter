@@ -12,8 +12,7 @@ namespace GameScripts.PlayerScripts
         [SerializeField] private Transform groundCheck;
         [SerializeField] private float playerStandHeight = 1.8f;
         [SerializeField] private float playerCrouchHeight = 0.4f;
-        [SerializeField] private float maxWalkSpeed = 5;
-        [SerializeField] private float sensitivity = 5;
+        [SerializeField] private float maxWalkSpeed = 3;
         private CharacterController _characterController;
         private GameScreenUIView _gameScreenUIView;
         private Camera _camera;
@@ -23,6 +22,7 @@ namespace GameScripts.PlayerScripts
         private Vector2 _lookInput;
         private Vector3 _cameraStandPosition;
         private Vector3 _cameraCrouchPosition;
+        private float _sensitivity;
         private bool _isGrounded;
         private float _groundDistance = 0.4f;
         private float _gravity = 10f;
@@ -34,13 +34,14 @@ namespace GameScripts.PlayerScripts
         
         public bool IsAlive { get; set; }
 
-        public void Initialize(GameScreenUIView gameScreenUIView, Camera camera)
+        public void Initialize(GameScreenUIView gameScreenUIView, Camera camera, float sensitivity)
         {
             _camera = camera;
             _cameraStandPosition = new Vector3(0f, playerStandHeight - 0.1f, 0f);
             _cameraCrouchPosition = new Vector3(0f, playerCrouchHeight, 0f);
             _camera.transform.localPosition = _cameraStandPosition;
             _gameScreenUIView = gameScreenUIView;
+            this._sensitivity = sensitivity;
             _characterController = GetComponent<CharacterController>();
             _joystick = _gameScreenUIView.walkJoystick;
             _rightFingerID = -1;
@@ -84,7 +85,7 @@ namespace GameScripts.PlayerScripts
                     case TouchPhase.Moved:
                         if (t.fingerId == _rightFingerID)
                         {
-                            _lookInput = t.deltaPosition * (sensitivity * Time.deltaTime);
+                            _lookInput = t.deltaPosition * (_sensitivity * Time.deltaTime);
                         }
 
                         break;

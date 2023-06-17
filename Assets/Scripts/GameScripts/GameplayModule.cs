@@ -24,10 +24,11 @@ namespace GameScripts
         //[SerializeField] private AudioSource siren;
         //[SerializeField] private float breakingTime = 20000f;
         //[SerializeField] private float breakTimeMultiplier = 1.2f;
-        private LevelScriptableObject _currentLevelScriptableObject;
+        //private LevelScriptableObject _currentLevelScriptableObject;
         //private List<Breakable> _breakables = new();  
         [SerializeField] private float messageFadeTime = 0.5f;
-        public Player player;
+        [SerializeField] private Player player;
+        public float cameraSensitivity;
         private GameScreenUIView _gameScreenUIView;
         private IBreakable _currentBroken;
         private bool _surviveStarted;
@@ -37,7 +38,7 @@ namespace GameScripts
         {
             _gameScreenUIView = gameScreenUIView;
             player = Instantiate(player, transform).GetComponent<Player>();
-            player.Initialize(gameScreenUIView, _camera);
+            player.Initialize(gameScreenUIView, _camera, cameraSensitivity);
         }
 
         public async void StartGame()
@@ -134,12 +135,12 @@ namespace GameScripts
         
         public void LoadData(GameData gameData)
         {
-            //Not ready yet
+            cameraSensitivity = gameData.CameraSensitivity;
         }
 
         public void SaveData(ref GameData gameData)
         {
-            //Not ready yet
+            gameData.CameraSensitivity = cameraSensitivity;
         }
     }
 }

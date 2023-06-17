@@ -13,5 +13,6 @@ namespace UIModules.MainMenu.Scripts
         public Switch soundsSwitch;
         public Slider musicVolumeSlider;
         public Slider soundsVolumeSlider;
+        public Slider sensitivitySlider;
     }
 }
