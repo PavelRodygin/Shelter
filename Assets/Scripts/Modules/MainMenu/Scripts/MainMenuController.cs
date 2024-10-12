@@ -3,6 +3,7 @@ using Core.Controllers;
 using Core.Systems;
 using Cysharp.Threading.Tasks;
 using GameScripts;
+using Modules.GameScreen.Scripts;
 using UnityEngine;
 
 namespace UIModules.MainMenu.Scripts
@@ -11,18 +12,18 @@ namespace UIModules.MainMenu.Scripts
     {
         private readonly IRootController _rootController;
         private readonly AudioSystem _audioSystem;
-        private readonly GameplayModule _gameplayModule;
+        private readonly LevelManager _levelManager;
         private readonly MainMenuUIView _mainMenuUIView;
         private readonly UniTaskCompletionSource<Action> _completionSource;
 
         public MainMenuController(IRootController rootController, MainMenuUIView mainMenuUIView, AudioSystem audioSystem,
-            GameplayModule gameplayModule)
+            LevelManager levelManager)
         {
             _rootController = rootController;
             _mainMenuUIView = mainMenuUIView;
             _mainMenuUIView.gameObject.SetActive(false);    
             _audioSystem = audioSystem;
-            _gameplayModule = gameplayModule;
+            _levelManager = levelManager;
             _completionSource = new UniTaskCompletionSource<Action>();
         }
         
@@ -59,7 +60,7 @@ namespace UIModules.MainMenu.Scripts
             _mainMenuUIView.settingsPopup.gameObject.SetActive(true);
             _mainMenuUIView.settingsPopup.musicVolumeSlider.value = _audioSystem.MusicVolume;
             _mainMenuUIView.settingsPopup.soundsVolumeSlider.value = _audioSystem.SoundsVolume;
-            _mainMenuUIView.settingsPopup.sensitivitySlider.value = _gameplayModule.CameraSensitivity;
+            _mainMenuUIView.settingsPopup.sensitivitySlider.value = _levelManager.CameraSensitivity;
             await _mainMenuUIView.settingsPopup.Show();
         }
         
@@ -121,7 +122,7 @@ namespace UIModules.MainMenu.Scripts
             }
         }
         
-        private void ChangeSensitivitySlider(float sensitivity) => _gameplayModule.CameraSensitivity = sensitivity;
+        private void ChangeSensitivitySlider(float sensitivity) => _levelManager.CameraSensitivity = sensitivity;
 
         private async void HideSettingsPopup() => await _mainMenuUIView.settingsPopup.Hide();
         

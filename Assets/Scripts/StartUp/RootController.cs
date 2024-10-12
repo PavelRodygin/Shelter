@@ -4,15 +4,12 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
-namespace Start
+namespace StartUp
 {
     public class RootController : MonoBehaviour, IRootController
     {
+        [Inject] private ScreenTypeMapper _screenTypeMapper;
         private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
-        
-        [Inject]
-        private ControllerMapper _controllerMapper;
-
         private IController _currentController;
 
         private void Start()
@@ -26,17 +23,12 @@ namespace Start
             await _semaphoreSlim.WaitAsync();
             try
             {
-                if (_controllerMapper == null)
-                    Debug.Log("ControllerMapper - NULL");
-                _currentController = _controllerMapper.Resolve(controllerMap);
+                _currentController = _screenTypeMapper.Resolve(controllerMap);
                 await _currentController.Run(param);
                 await _currentController.Stop();
                 _currentController.Dispose();
             }
-            finally
-            {
-                _semaphoreSlim.Release();
-            }
+            finally { _semaphoreSlim.Release(); }
         }
     }
 }

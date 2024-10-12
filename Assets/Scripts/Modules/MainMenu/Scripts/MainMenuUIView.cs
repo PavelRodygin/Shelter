@@ -1,4 +1,5 @@
 ﻿using Core.Views;
+using Modules.MainMenu.Scripts;
 using UnityEngine.UI;
 
 namespace UIModules.MainMenu.Scripts

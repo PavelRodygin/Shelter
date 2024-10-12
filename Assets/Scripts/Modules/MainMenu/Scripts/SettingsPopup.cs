@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Popup = Core.UI.Popup;
 
-namespace UIModules.MainMenu.Scripts
+namespace Modules.MainMenu.Scripts
 {
     [RequireComponent(typeof(Popup))]
     public class SettingsPopup : Popup
