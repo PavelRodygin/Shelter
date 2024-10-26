@@ -2,7 +2,6 @@
 using Core.Controllers;
 using Core.Systems;
 using Cysharp.Threading.Tasks;
-using GameScripts;
 using Modules.GameScreen.Scripts;
 using UnityEngine;
 

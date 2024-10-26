@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using GameScripts;
 using Modules.GameScreen.Scripts;
 using UnityEngine;
 using Zenject;
