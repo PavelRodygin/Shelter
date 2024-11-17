@@ -43,7 +43,7 @@ namespace Modules.GameScreen.Scripts
 
         //private async void BreakSomething()
         //{
-            // while (player.MoveController.IsAlive)
+            // while (player.FirstPersonController.IsAlive)
             // {
             //     int index = Random.Range(0, breakable.Count); 
             //     //breakables[index]Break();

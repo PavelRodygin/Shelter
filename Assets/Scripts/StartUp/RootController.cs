@@ -15,7 +15,7 @@ namespace StartUp
         private void Start()
         {
             Application.targetFrameRate = 30;
-            RunController(ControllerMap.MainMenu, null).Forget();
+            RunController(ControllerMap.GameScreen, null).Forget();
         }
 
         public async UniTaskVoid RunController(ControllerMap controllerMap, object param)

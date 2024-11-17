@@ -2,12 +2,15 @@ using Core.GameInterfaces;
 using Core.Gameplay.AbstractClasses;
 using Cysharp.Threading.Tasks;
 using Modules.GameScreen.Scripts;
+using StarterAssets;
 using UnityEngine;
 
 namespace Core.Gameplay.PlayerScripts
 {
+    //TODO Убрать 
     public class PlayerInteractionController : MonoBehaviour
     {
+        [SerializeField] private StarterAssetsInputs starterAssetsInputs;
         [SerializeField] private float minLookCosine = 0.9f; // D(cos) = [-1;1]
         private Camera _camera;
         private GameScreenView _gameScreenView;
@@ -35,8 +38,7 @@ namespace Core.Gameplay.PlayerScripts
         {
             if(!_interactButtonShowed && CheckLookToObject(_currentDoor.PointToLook))               
             {
-                while (_currentDoor is { IsInteractable: false })
-                    await UniTask.Yield();
+                while (_currentDoor is { IsInteractable: false }) await UniTask.Yield();
                 _gameScreenView.interactButton.gameObject.SetActive(true);
                 _interactButtonShowed = true;
             }
@@ -89,6 +91,7 @@ namespace Core.Gameplay.PlayerScripts
             
             else if (other.transform.parent.TryGetComponent(out _currentInteractable))
                 _gameScreenView.interactButton.onClick.AddListener(_currentInteractable.Interact);
+            
             else if (other.TryGetComponent(out _currentItem))
             {
                 _gameScreenView.interactButton.gameObject.SetActive(true);

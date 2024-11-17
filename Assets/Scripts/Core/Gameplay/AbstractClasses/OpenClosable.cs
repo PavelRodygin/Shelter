@@ -23,6 +23,7 @@ namespace Core.Gameplay.AbstractClasses
 
         public virtual void OpenClose()
         {
+            Debug.Log("Opening closable");
             if (_isOpen && _isInteractable)
             {
                 AnimController.SetBool(Open, false);

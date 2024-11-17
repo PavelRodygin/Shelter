@@ -10,7 +10,7 @@ namespace Core.Gameplay.AbstractClasses
         private const int LevelsToMoveUp = 3;
 
         [SerializeField] private Rigidbody rigidBody;
-        [SerializeField] private MeshCollider physicCollider;
+        [SerializeField] private Collider collisionCollider;
         [SerializeField] private SphereCollider triggerCollider;
         
         public Transform Transform => transform;
@@ -19,7 +19,7 @@ namespace Core.Gameplay.AbstractClasses
         {
             rigidBody.isKinematic = true;
             triggerCollider.enabled = false;
-            physicCollider.enabled = false;
+            collisionCollider.enabled = false;
             var transform1 = transform;
             transform1.rotation = owner.rotation;
             transform1.parent = owner;
@@ -30,7 +30,7 @@ namespace Core.Gameplay.AbstractClasses
         {
             rigidBody.isKinematic = false;
             rigidBody.useGravity = true;
-            physicCollider.enabled = true;
+            collisionCollider.enabled = true;
             var parent = transform.parent;
             for (var i = 0; i < LevelsToMoveUp && parent != null; i++)
                 parent = parent.parent;

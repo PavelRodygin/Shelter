@@ -10,18 +10,18 @@ namespace Modules.GameScreen.Scripts
         private readonly GameScreenView _gameScreenView;
         private readonly LevelManager _levelManager;
         private readonly GameMessageManager _gameMessageManager;
-        private readonly StoryManager _gameStoryManager;
+        // private readonly StoryManager _gameStoryManager;
         private readonly UniTaskCompletionSource<Action> _completionSource;
 
         public GameScreenController(IRootController rootController, GameScreenView gameScreenView,
-            LevelManager levelManager, GameMessageManager gameMessageManager, StoryManager gameStoryManager)
+            LevelManager levelManager, GameMessageManager gameMessageManager)
         {
             _rootController = rootController;
             _gameScreenView = gameScreenView;
             _gameScreenView.gameObject.SetActive(false);
             _levelManager = levelManager;
             _gameMessageManager = gameMessageManager;
-            _gameStoryManager = gameStoryManager;
+            // _gameStoryManager = gameStoryManager;
             _completionSource = new UniTaskCompletionSource<Action>();
         }
         
@@ -33,7 +33,7 @@ namespace Modules.GameScreen.Scripts
             _levelManager.Initialize(_gameScreenView);
             await _levelManager.Show();
             _gameMessageManager.Initialize(_gameScreenView);
-            _gameStoryManager.StartGame();
+            // _gameStoryManager.StartGame();
             
             var result = await _completionSource.Task;
             result.Invoke();

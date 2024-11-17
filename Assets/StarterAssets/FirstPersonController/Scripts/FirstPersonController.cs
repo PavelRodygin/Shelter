@@ -1,9 +1,9 @@
-﻿using UnityEngine;
-#if ENABLE_INPUT_SYSTEM
+﻿using DG.Tweening;
+using StarterAssets;
+using UnityEngine;
 using UnityEngine.InputSystem;
-#endif
 
-namespace StarterAssets
+namespace Core.Gameplay.PlayerScripts
 {
 	[RequireComponent(typeof(CharacterController))]
 #if ENABLE_INPUT_SYSTEM
@@ -33,15 +33,23 @@ namespace StarterAssets
 		[Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
 		public float FallTimeout = 0.15f;
 
-		[Header("Player Grounded")]
+		[Header("Player IsGrounded")]
 		[Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
-		public bool Grounded = true;
+		public bool IsGrounded = true;
 		[Tooltip("Useful for rough ground")]
 		public float GroundedOffset = -0.14f;
 		[Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
 		public float GroundedRadius = 0.5f;
 		[Tooltip("What layers the character uses as ground")]
 		public LayerMask GroundLayers;
+		
+		[Header("Crouch Settings")]
+		[Tooltip("Shows if the character is chrouching. Not part of the CharacterController built in grounded check")]
+		public bool IsCrouching;
+		[Tooltip("Height of the character when crouching")]
+		public float playerCrouchHeight = 1.0f;
+		[Tooltip("Height of the character when standing")]
+		public float playerStandHeight = 2.0f;
 
 		[Header("Cinemachine")]
 		[Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
@@ -53,6 +61,9 @@ namespace StarterAssets
 
 		// cinemachine
 		private float _cinemachineTargetPitch;
+		
+		private Vector3 _cameraStandPosition = new(0f, 1.375f, 0f);
+		private Vector3 _cameraCrouchPosition = new(0f, 0.75f, 0f);
 
 		// player
 		private float _speed;
@@ -68,7 +79,7 @@ namespace StarterAssets
 #if ENABLE_INPUT_SYSTEM
 		private PlayerInput _playerInput;
 #endif
-		private CharacterController _controller;
+		private CharacterController _characterController;
 		private StarterAssetsInputs _input;
 		private GameObject _mainCamera;
 
@@ -97,7 +108,7 @@ namespace StarterAssets
 
 		private void Start()
 		{
-			_controller = GetComponent<CharacterController>();
+			_characterController = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
 #if ENABLE_INPUT_SYSTEM
 			_playerInput = GetComponent<PlayerInput>();
@@ -115,8 +126,11 @@ namespace StarterAssets
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
+			CrouchGetUp();
+			
+			Debug.Log($"IsCrouching: {IsCrouching}, _input.crouch {_input.crouch}");
 		}
-
+		
 		private void LateUpdate()
 		{
 			CameraRotation();
@@ -126,7 +140,7 @@ namespace StarterAssets
 		{
 			// set sphere position, with offset
 			Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
-			Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
+			IsGrounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
 		}
 
 		private void CameraRotation()
@@ -163,7 +177,7 @@ namespace StarterAssets
 			if (_input.move == Vector2.zero) targetSpeed = 0.0f;
 
 			// a reference to the players current horizontal velocity
-			float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
+			float currentHorizontalSpeed = new Vector3(_characterController.velocity.x, 0.0f, _characterController.velocity.z).magnitude;
 
 			float speedOffset = 0.1f;
 			float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
@@ -195,12 +209,12 @@ namespace StarterAssets
 			}
 
 			// move the player
-			_controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+			_characterController.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 		}
 
 		private void JumpAndGravity()
 		{
-			if (Grounded)
+			if (IsGrounded)
 			{
 				// reset the fall timeout timer
 				_fallTimeoutDelta = FallTimeout;
@@ -245,6 +259,66 @@ namespace StarterAssets
 				_verticalVelocity += Gravity * Time.deltaTime;
 			}
 		}
+		
+		private void CrouchGetUp()
+		{
+			// Если клавиша "C" была нажата
+			if (_input.crouch)
+			{
+				// Сбрасываем значение после обработки, чтобы предотвратить повторное выполнение
+				_input.crouch = false;
+
+				// Переключение между состояниями приседания и вставания
+				if (IsCrouching)
+				{
+					TryStandUp();
+				}
+				else
+				{
+					StartCrouching();
+				}
+			}
+		}
+
+		private void StartCrouching()
+		{
+			IsCrouching = true;
+
+			// Меняем высоту и центр контроллера
+			_characterController.height = playerCrouchHeight;
+			_characterController.center = new Vector3(0f, playerCrouchHeight / 2, 0f);
+
+			// Плавное смещение камеры
+			CinemachineCameraTarget.transform.DOLocalMove(_cameraCrouchPosition, 0.25f);
+		}
+
+		private void TryStandUp()
+		{
+			// Начальная точка для луча - вершина капсулы
+			Vector3 raycastStart = transform.position + Vector3.up * playerCrouchHeight;
+
+			// Бросаем луч вверх от вершины капсулы
+			if (!Physics.Raycast(raycastStart, Vector3.up, playerStandHeight - playerCrouchHeight))
+			{
+				StartStanding();
+			}
+			else
+			{
+				Debug.Log("Над головой есть препятствие! Невозможно встать.");
+			}
+		}
+		
+		private void StartStanding()
+		{
+			IsCrouching = false;
+
+			// Возвращаем стандартную высоту и центр контроллера
+			_characterController.height = playerStandHeight;
+			_characterController.center = new Vector3(0f, playerStandHeight / 2, 0f);
+
+			// Плавное смещение камеры
+			CinemachineCameraTarget.transform.DOLocalMove(_cameraStandPosition, 0.25f);
+		}
 
 		private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
 		{
@@ -258,7 +332,7 @@ namespace StarterAssets
 			Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
 			Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
 
-			if (Grounded) Gizmos.color = transparentGreen;
+			if (IsGrounded) Gizmos.color = transparentGreen;
 			else Gizmos.color = transparentRed;
 
 			// when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
