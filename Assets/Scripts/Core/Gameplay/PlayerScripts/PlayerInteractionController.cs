@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Core.Gameplay.PlayerScripts
 {
-    //TODO Убрать 
+    //TODO Убрать Работу с кнопками
     public class PlayerInteractionController : MonoBehaviour
     {
         [SerializeField] private StarterAssetsInputs starterAssetsInputs;
@@ -18,7 +18,7 @@ namespace Core.Gameplay.PlayerScripts
         private IOpenClosable _currentDoor; 
         private IInteractable _currentInteractable;
         private Item _currentItem;
-        private bool _interactButtonShowed;
+        private bool _canInteract;
 
         public void Initialize(GameScreenView gameScreenView, Camera camera)
         {
@@ -36,44 +36,75 @@ namespace Core.Gameplay.PlayerScripts
 
         private async void OpenClose()
         {
-            if(!_interactButtonShowed && CheckLookToObject(_currentDoor.PointToLook))               
+            // Проверяем, смотрит ли игрок на дверь и может ли взаимодействовать
+            if (CheckLookToObject(_currentDoor.PointToLook))
             {
-                while (_currentDoor is { IsInteractable: false }) await UniTask.Yield();
+                // Отображаем кнопку взаимодействия
                 _gameScreenView.interactButton.gameObject.SetActive(true);
-                _interactButtonShowed = true;
+
+                // Ожидаем, пока дверь станет интерактивной
+                while (_currentDoor is { IsInteractable: false })
+                {
+                    await UniTask.Yield();
+                }
+
+                // Если игрок нажал кнопку взаимодействия
+                if (starterAssetsInputs.interact)
+                {
+                    _currentDoor?.OpenClose(); // Выполняем действие
+                    starterAssetsInputs.interact = false; // Сбрасываем флаг взаимодействия
+                }
+
+                _canInteract = true; // Разрешаем дальнейшее взаимодействие
             }
-            else if (!CheckLookToObject(_currentDoor.PointToLook)) 
+            else
             {
-                _gameScreenView.interactButton.gameObject.SetActive(false);  
-                _interactButtonShowed = false;
+                // Если игрок больше не смотрит на дверь, скрываем кнопку взаимодействия
+                _gameScreenView.interactButton.gameObject.SetActive(false);
+                starterAssetsInputs.interact = false; // Сбрасываем флаг взаимодействия
+                _canInteract = false; // Запрещаем дальнейшее взаимодействие
             }
         }
+
         
         private void Interact()
         {
+            // Проверяем, смотрит ли игрок на объект
             if (CheckLookToObject(_currentInteractable.PointToLook))
             {
+                // Отображаем кнопку взаимодействия
                 _gameScreenView.interactButton.gameObject.SetActive(true);
-                _interactButtonShowed = false;
+
+                // Если игрок нажал кнопку взаимодействия
+                if (starterAssetsInputs.interact)
+                {
+                    _currentInteractable.Interact(); // Выполняем действие
+                    starterAssetsInputs.interact = false; // Сбрасываем флаг взаимодействия
+                }
+
+                _canInteract = true; // Разрешаем дальнейшее взаимодействие
             }
-            else if(!CheckLookToObject(_currentInteractable.PointToLook)) 
+            else
             {
+                // Если игрок больше не смотрит на объект, скрываем кнопку взаимодействия
                 _gameScreenView.interactButton.gameObject.SetActive(false);
-                _interactButtonShowed = false;
+                starterAssetsInputs.interact = false; // Сбрасываем флаг взаимодействия
+                _canInteract = false; // Запрещаем дальнейшее взаимодействие
             }
         }
+
 
         private void FindItem()
         {
             if(CheckLookToObject(_currentItem.transform))
             {
-                _interactButtonShowed = true; 
+                _canInteract = true; 
                 _gameScreenView.interactButton.gameObject.SetActive(true);
             }
             else if(!CheckLookToObject(_currentItem.transform))
             {
                 _gameScreenView.interactButton.gameObject.SetActive(false);
-                _interactButtonShowed = false;
+                _canInteract = false;
             }
         }
 
@@ -87,16 +118,20 @@ namespace Core.Gameplay.PlayerScripts
         private void OnTriggerEnter(Collider other)
         {
             if (other.transform.parent.TryGetComponent(out _currentDoor))
-                _gameScreenView.interactButton.onClick.AddListener(_currentDoor.OpenClose);
-            
+            {
+                // _gameScreenView.interactButton.onClick.AddListener(_currentDoor.OpenClose);
+            }
+
             else if (other.transform.parent.TryGetComponent(out _currentInteractable))
-                _gameScreenView.interactButton.onClick.AddListener(_currentInteractable.Interact);
-            
+            {
+                // _gameScreenView.interactButton.onClick.AddListener(_currentInteractable.Interact);
+            }
+
             else if (other.TryGetComponent(out _currentItem))
             {
-                _gameScreenView.interactButton.gameObject.SetActive(true);
-                _gameScreenView.interactButton.onClick.AddListener(OnItemFound); 
-                _gameScreenView.interactButton.gameObject.SetActive(false);
+                // _gameScreenView.interactButton.gameObject.SetActive(true);
+                // _gameScreenView.interactButton.onClick.AddListener(OnItemFound); 
+                // _gameScreenView.interactButton.gameObject.SetActive(false);
             }
         }
 
@@ -111,25 +146,25 @@ namespace Core.Gameplay.PlayerScripts
             if (other.GetComponentInParent<IOpenClosable>() != null)
             {
                 if (_currentDoor == null) return;
-                _gameScreenView.interactButton.gameObject.SetActive(true);
-                _gameScreenView.interactButton.onClick.RemoveListener(_currentDoor.OpenClose);
+                // _gameScreenView.interactButton.gameObject.SetActive(true);
+                // _gameScreenView.interactButton.onClick.RemoveListener(_currentDoor.OpenClose);
                 _gameScreenView.interactButton.gameObject.SetActive(false);
                 _currentDoor = null;
-                _interactButtonShowed = false;
+                _canInteract = false;
             }
             else if (other.GetComponentInParent<IInteractable>() != null)
             {
                 if (_currentInteractable == null) return;
-                _gameScreenView.interactButton.gameObject.SetActive(true);
-                _gameScreenView.interactButton.onClick.RemoveListener(_currentInteractable.Interact);
+                // _gameScreenView.interactButton.gameObject.SetActive(true);
+                // _gameScreenView.interactButton.onClick.RemoveListener(_currentInteractable.Interact);
                 _gameScreenView.interactButton.gameObject.SetActive(false);
                 _currentInteractable = null;
-                _interactButtonShowed = false;
+                _canInteract = false;
             }
             else if (other.GetComponent<IItem>() != null)
             {
-                _gameScreenView.interactButton.gameObject.SetActive(true);
-                _gameScreenView.interactButton.onClick.RemoveListener(OnItemFound);
+                // _gameScreenView.interactButton.gameObject.SetActive(true);
+                // _gameScreenView.interactButton.onClick.RemoveListener(OnItemFound);
                 _gameScreenView.interactButton.gameObject.SetActive(false);
                 _currentItem = null;
             }

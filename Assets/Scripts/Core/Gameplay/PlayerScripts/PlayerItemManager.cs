@@ -20,10 +20,10 @@ namespace Core.Gameplay.PlayerScripts
             var handStockPos = hand.transform.localPosition;
             hand.parent = _camera.transform;
             hand.localPosition = handStockPos;
-            _item = hand.GetComponentInChildren<Smartphone>();
-            _item.Grab(hand);
+            // _item = hand.GetComponentInChildren<Smartphone>();
+            // _item.Grab(hand);
             _gameScreenView.interactButton.gameObject.SetActive(false);
-            _gameScreenView.dropButton.gameObject.SetActive(true);
+            // _gameScreenView.dropButton.gameObject.SetActive(true);
             _gameScreenView.dropButton.onClick.AddListener(ThrowItem);
         }
         

@@ -1,4 +1,3 @@
-using UnityEditor.Animations;
 
 namespace Core.Animation
 {
@@ -6,6 +5,6 @@ namespace Core.Animation
     {
         void EnteredState(int stateHash);
         void ExitedState(int stateHash);
-        AnimatorState State { get; }
+        // AnimatorState State { get; }
     }
 }

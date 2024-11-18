@@ -63,7 +63,7 @@ namespace Core.Gameplay.PlayerScripts
 		private float _cinemachineTargetPitch;
 		
 		private Vector3 _cameraStandPosition = new(0f, 1.375f, 0f);
-		private Vector3 _cameraCrouchPosition = new(0f, 0.75f, 0f);
+		private Vector3 _cameraCrouchPosition = new(0f, 0.4f, 0f);
 
 		// player
 		private float _speed;
@@ -127,8 +127,6 @@ namespace Core.Gameplay.PlayerScripts
 			GroundedCheck();
 			Move();
 			CrouchGetUp();
-			
-			Debug.Log($"IsCrouching: {IsCrouching}, _input.crouch {_input.crouch}");
 		}
 		
 		private void LateUpdate()

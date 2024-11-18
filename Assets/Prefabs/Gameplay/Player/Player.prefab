@@ -92,7 +92,7 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 2
+  m_Height: 1.8
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.25
@@ -111,6 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6186f041dc19e9b44a2d8f31121cbee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firstPersonController: {fileID: 0}
   interactionController: {fileID: 6340496077104910398}
   pockets: {fileID: 4608831677718431061}
 --- !u!114 &6340496077104910398
@@ -125,6 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19e895f63669e4a4b9a8e08a2afea512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  starterAssetsInputs: {fileID: 0}
   minLookCosine: 0.9
 --- !u!114 &4608831677718431061
 MonoBehaviour:
@@ -174,6 +176,7 @@ MonoBehaviour:
   jump: 0
   sprint: 0
   crouch: 0
+  interact: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
@@ -302,8 +305,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 9
   IsCrouching: 0
-  playerCrouchHeight: 1
-  playerStandHeight: 2
+  playerCrouchHeight: 0.5
+  playerStandHeight: 1.8
   CinemachineCameraTarget: {fileID: 2302462143191347999}
   TopClamp: 90
   BottomClamp: -90
