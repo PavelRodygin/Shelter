@@ -27,7 +27,7 @@ namespace CodeBase.Implementation.Modules.Template.TemplateScreen
             _templateScreenView.HideInstantly();
             _templateScreenView.SetupEventListeners
             (
-                
+                OnBackButtonClicked
             );
             await _templateScreenView.Show();
             await _completionSource.Task;
@@ -44,6 +44,11 @@ namespace CodeBase.Implementation.Modules.Template.TemplateScreen
             //If model is used, there must be removing event listeners of model
             _templateScreenView.Dispose();
             _templateScreenViewModel.Dispose();
+        }
+        
+        private void OnBackButtonClicked()
+        {
+            RunNewScreen(ScreenViewModelMap.Bootstrap);
         }
 
         private void RunNewScreen(ScreenViewModelMap screen, object param = null)

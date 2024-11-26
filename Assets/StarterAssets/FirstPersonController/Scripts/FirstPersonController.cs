@@ -298,7 +298,7 @@ namespace Core.Gameplay.PlayerScripts
 			// Бросаем луч вверх от вершины капсулы
 			if (!Physics.Raycast(raycastStart, Vector3.up, playerStandHeight - playerCrouchHeight))
 			{
-				StartStanding();
+				StandUp();
 			}
 			else
 			{
@@ -306,7 +306,7 @@ namespace Core.Gameplay.PlayerScripts
 			}
 		}
 		
-		private void StartStanding()
+		private void StandUp()
 		{
 			IsCrouching = false;
 

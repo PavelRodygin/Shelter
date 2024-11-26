@@ -58,6 +58,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "DropItem",
+                    "type": "Button",
+                    "id": "4e77bec4-6289-4285-a542-438a462079d1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -267,6 +276,17 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0cea11bd-bda1-46ee-885d-9f321dfc2e4b",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "DropItem",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
