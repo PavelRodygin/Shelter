@@ -17,13 +17,13 @@ namespace Core.Gameplay.PlayerScripts
         
         [SerializeField] private FirstPersonController firstPersonController;
         [SerializeField] private PlayerInteractionController interactionController;
-        [SerializeField] private PlayerItemManager pockets;
+        [SerializeField] private PlayerItemManager itemManager;
         private bool _isAlive;
 
         public void Initialize( float sensitivity)
         {
             interactionController.Initialize(_gameScreenView, _camera);
-            pockets.Initialize(_gameScreenView, _camera);
+            itemManager.Initialize(_gameScreenView, _camera);
         }
         
         public async UniTask Show()    //TODO EyesClosing or smth beatiful

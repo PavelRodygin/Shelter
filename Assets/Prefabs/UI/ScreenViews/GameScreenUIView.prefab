@@ -1043,10 +1043,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   messageText: {fileID: 8440381150252399772}
-  interactButton: {fileID: 6091996199376967888}
-  crouchButton: {fileID: 5395636223773380583}
-  dropButton: {fileID: 484241554713078967}
-  walkJoystick: {fileID: 1011039670266148049}
+  interactTipView: {fileID: 6091996199376967901}
+  crouchTipView: {fileID: 8531697346777669694}
+  dropItemTipView: {fileID: 1626047721225956492}
 --- !u!1 &5470343691151384346
 GameObject:
   m_ObjectHideFlags: 0
@@ -2394,14 +2393,3 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 224977699150327530, guid: e0815e227ed46e445b99930271e8942c, type: 3}
   m_PrefabInstance: {fileID: 1121937645438917967}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1011039670266148049 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114282555968907678, guid: e0815e227ed46e445b99930271e8942c, type: 3}
-  m_PrefabInstance: {fileID: 1121937645438917967}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d42b387efc83be49900b546e4052e28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

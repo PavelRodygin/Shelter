@@ -60,7 +60,7 @@ namespace StarterAssets
 
 		public void OnDropItem(InputValue value)
 		{
-			InteractInput(value.isPressed);
+			DropItemInput(value.isPressed);
 		}
 #endif
 

@@ -41,8 +41,7 @@ namespace Modules.GameScreen.Scripts
         
         private void SetupEventListeners()
         {
-            _gameScreenView.interactButton.onClick.AddListener(() => _gameScreenView.interactButton.gameObject.SetActive(false));
-            _gameScreenView.dropButton.onClick.AddListener(() => _gameScreenView.dropButton.gameObject.SetActive(false));
+            
         }
 
         public async UniTask Stop()

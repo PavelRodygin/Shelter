@@ -1,11 +1,11 @@
+using Core.GameInterfaces;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Core.Gameplay.AbstractClasses
 {
     [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(Collider))]
-    public abstract class Item : MonoBehaviour
+    public abstract class Item : MonoBehaviour, IItem
     {
         private const int LevelsToMoveUp = 3;
 
@@ -15,7 +15,7 @@ namespace Core.Gameplay.AbstractClasses
         
         public Transform Transform => transform;
 
-        public virtual void Grab(Transform owner)                         
+        public virtual void GetGrabbed(Transform owner)                         
         {
             rigidBody.isKinematic = true;
             triggerCollider.enabled = false;
@@ -25,8 +25,8 @@ namespace Core.Gameplay.AbstractClasses
             transform1.parent = owner;
             transform1.localPosition = Vector3.zero;
         }
-        
-        public virtual async void Throw(Vector3 force) 
+
+        public virtual async void GetThrown(Vector3 force) 
         {
             rigidBody.isKinematic = false;
             rigidBody.useGravity = true;

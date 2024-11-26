@@ -1,3 +1,4 @@
+using Core.GameInterfaces;
 using Core.Gameplay.AbstractClasses;
 using Core.Gameplay.Items;
 using Modules.GameScreen.Scripts;
@@ -10,11 +11,11 @@ namespace Core.Gameplay.PlayerScripts
     {
         [SerializeField] private Transform hand;
         [SerializeField] private float throwForce = 5;
-        [SerializeField] private StarterAssetsInputs starterAssetsInputs;
-        
+        [SerializeField] private StarterAssetsInputs _starterAssetsInputs;
+
         private GameScreenView _gameScreenView;
         private Camera _camera;
-        private Item _item;
+        private IItem _item;
 
         public void Initialize(GameScreenView gameScreenView, Camera camera)
         {
@@ -24,56 +25,40 @@ namespace Core.Gameplay.PlayerScripts
             // Привязываем руку к камере
             var handStockPos = hand.transform.localPosition;
             hand.parent = _camera.transform;
-            hand.localPosition = handStockPos;
+            hand.transform.rotation = _camera.transform.rotation;
 
-            // Изначально берем предмет, если он есть в руке
-            _item = hand.GetComponentInChildren<Smartphone>();
-            if (_item != null)
+            // Убедимся, что на старте предмет в руке корректно обработан
+            if (hand.GetComponentInChildren<IItem>() != null)
             {
-                _item.Grab(hand);
+                _item = hand.GetComponentInChildren<IItem>();
+                _item.GetGrabbed(hand);
             }
         }
-        
-        // private void Update()
-        // {
-        //     // Проверяем ввод игрока
-        //     if (starterAssetsInputs.interact)
-        //     {
-        //         TryGrabItem();
-        //         starterAssetsInputs.interact = false; // Сбрасываем флаг
-        //     }
-        //
-        //     if (starterAssetsInputs.dropItem)
-        //     {
-        //         ThrowItem();
-        //         starterAssetsInputs.dropItem = false; // Сбрасываем флаг
-        //     }
-        // }
 
-        // private void TryGrabItem()
-        // {
-        //     // Логика для взятия предмета (можно добавить проверку на предмет перед игроком)
-        //     if (_item == null)
-        //     {
-        //         Debug.Log("Нет предмета для взаимодействия.");
-        //         return;
-        //     }
-        //
-        //     GrabItem(_item);
-        // }
+        private void Update()
+        {
+            // Проверяем ввод на выброс предмета
+            if (_starterAssetsInputs.dropItem)
+            {
+                ThrowItem();
+                _starterAssetsInputs.dropItem = false; // Сбрасываем состояние ввода
+            }
+        }
 
-        public void GrabItem(Item item)
+        public void GrabItem(IItem item)
         {
             if (item != null)
             {
+                // Если уже есть предмет, выбрасываем его
                 if (_item != null)
                 {
                     ThrowItem();
                 }
 
+                // Поднимаем новый предмет
                 _item = item;
-                _item.Grab(hand);
-                
+                _item.GetGrabbed(hand);
+
                 Debug.Log("Предмет успешно поднят!");
             }
         }
@@ -82,9 +67,10 @@ namespace Core.Gameplay.PlayerScripts
         {
             if (_item != null)
             {
-                _item.Throw(_camera.transform.forward.normalized * throwForce);
+                // Выбрасываем предмет с заданной силой в направлении камеры
+                _item.GetThrown(_camera.transform.forward.normalized * throwForce);
                 _item = null;
-                
+
                 Debug.Log("Предмет выброшен!");
             }
             else
