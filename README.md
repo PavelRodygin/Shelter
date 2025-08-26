@@ -179,7 +179,7 @@ The project follows **modular architecture** where each module is isolated and i
 
 - **Developer**: [Your Name]
 - **Course**: TeachMeSkills
-- **Year**: 2024
+- **Year**: 2022
 - **Project Type**: Graduation Project
 
 ## 📝 License
