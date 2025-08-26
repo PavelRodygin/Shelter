@@ -1,5 +1,5 @@
 using UnityEngine;
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
 
@@ -12,19 +12,17 @@ namespace StarterAssets
 		public Vector2 look;
 		public bool jump;
 		public bool sprint;
-		public bool crouch;
-		public bool interact;
-		public bool dropItem;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
 
+#if !UNITY_IOS || !UNITY_ANDROID
 		[Header("Mouse Cursor Settings")]
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
-		
+#endif
 
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 		public void OnMove(InputValue value)
 		{
 			MoveInput(value.Get<Vector2>());
@@ -47,21 +45,8 @@ namespace StarterAssets
 		{
 			SprintInput(value.isPressed);
 		}
-
-		public void OnCrouch(InputValue value)
-		{
-			CrouchInput(value.isPressed);
-		}
-
-		public void OnInteract(InputValue value)
-		{
-			InteractInput(value.isPressed);
-		}
-
-		public void OnDropItem(InputValue value)
-		{
-			DropItemInput(value.isPressed);
-		}
+#else
+	// old input sys if we do decide to have it (most likely wont)...
 #endif
 
 
@@ -85,20 +70,7 @@ namespace StarterAssets
 			sprint = newSprintState;
 		}
 
-		public void CrouchInput(bool newCrouchState)
-		{
-			crouch = newCrouchState;
-		}
-
-		public void InteractInput(bool newInteractState)
-		{
-			interact = newInteractState;
-		}
-
-		public void DropItemInput(bool newDropState)
-		{
-			dropItem = newDropState;
-		}
+#if !UNITY_IOS || !UNITY_ANDROID
 
 		private void OnApplicationFocus(bool hasFocus)
 		{
@@ -109,6 +81,9 @@ namespace StarterAssets
 		{
 			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
 		}
+
+#endif
+
 	}
 	
 }

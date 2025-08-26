@@ -261,21 +261,21 @@ namespace Core.Gameplay.PlayerScripts
 		private void CrouchGetUp()
 		{
 			// Если клавиша "C" была нажата
-			if (_input.crouch)
-			{
-				// Сбрасываем значение после обработки, чтобы предотвратить повторное выполнение
-				_input.crouch = false;
-
-				// Переключение между состояниями приседания и вставания
-				if (IsCrouching)
-				{
-					TryStandUp();
-				}
-				else
-				{
-					StartCrouching();
-				}
-			}
+			// if (_input.crouch)
+			// {
+			// 	// Сбрасываем значение после обработки, чтобы предотвратить повторное выполнение
+			// 	_input.crouch = false;
+			//
+			// 	// Переключение между состояниями приседания и вставания
+			// 	if (IsCrouching)
+			// 	{
+			// 		TryStandUp();
+			// 	}
+			// 	else
+			// 	{
+			// 		StartCrouching();
+			// 	}
+			// }
 		}
 
 		private void StartCrouching()

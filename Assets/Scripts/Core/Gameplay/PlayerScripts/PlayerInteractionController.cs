@@ -10,14 +10,13 @@ namespace Core.Gameplay.PlayerScripts
     //TODO Убрать Работу с кнопками
     public class PlayerInteractionController : MonoBehaviour
     {
-        [SerializeField] private StarterAssetsInputs starterAssetsInputs;
+        // [SerializeField] private StarterAssetsInputs starterAssetsInputs;
         [SerializeField] private float minLookCosine = 0.9f; // D(cos) = [-1;1]
         private Camera _camera;
         private GameScreenView _gameScreenView;
-        private PlayerItemManager _playerItemManager;
+        // private PlayerItemManager _playerItemManager;
         private IOpenClosable _currentDoor; 
-        private 
-            IInteractable _currentInteractable;
+        private IInteractable _currentInteractable;
         private IItem _currentItem;
         private bool _canInteract;
 
@@ -25,7 +24,7 @@ namespace Core.Gameplay.PlayerScripts
         {
             _camera = camera;
             _gameScreenView = gameScreenView;
-            _playerItemManager = GetComponent<PlayerItemManager>();
+            // _playerItemManager = GetComponent<PlayerItemManager>();
         }
         
         private void Update()
@@ -94,11 +93,11 @@ namespace Core.Gameplay.PlayerScripts
                 }
 
                 // Если игрок нажал кнопку взаимодействия
-                if (starterAssetsInputs.interact)
-                {
-                    _currentDoor?.OpenClose(); // Выполняем действие
-                    starterAssetsInputs.interact = false; // Сбрасываем флаг взаимодействия
-                }
+                // if (starterAssetsInputs.interact)
+                // {
+                //     _currentDoor?.OpenClose(); // Выполняем действие
+                //     starterAssetsInputs.interact = false; // Сбрасываем флаг взаимодействия
+                // }
 
                 _canInteract = true; // Разрешаем дальнейшее взаимодействие
             }
@@ -106,7 +105,7 @@ namespace Core.Gameplay.PlayerScripts
             {
                 // Если игрок больше не смотрит на дверь, скрываем кнопку взаимодействия
                 _gameScreenView.interactTipView.gameObject.SetActive(false);
-                starterAssetsInputs.interact = false; // Сбрасываем флаг взаимодействия
+                // starterAssetsInputs.interact = false; // Сбрасываем флаг взаимодействия
                 _canInteract = false; // Запрещаем дальнейшее взаимодействие
             }
         }
@@ -120,11 +119,11 @@ namespace Core.Gameplay.PlayerScripts
                 _gameScreenView.interactTipView.gameObject.SetActive(true);
 
                 // Если игрок нажал кнопку взаимодействия
-                if (starterAssetsInputs.interact)
-                {
-                    _currentInteractable.Interact(); // Выполняем действие
-                    starterAssetsInputs.interact = false; // Сбрасываем флаг взаимодействия
-                }
+                // if (starterAssetsInputs.interact)
+                // {
+                //     _currentInteractable.Interact(); // Выполняем действие
+                //     starterAssetsInputs.interact = false; // Сбрасываем флаг взаимодействия
+                // }
 
                 _canInteract = true; // Разрешаем дальнейшее взаимодействие
             }
@@ -132,7 +131,7 @@ namespace Core.Gameplay.PlayerScripts
             {
                 // Если игрок больше не смотрит на объект, скрываем кнопку взаимодействия
                 _gameScreenView.interactTipView.gameObject.SetActive(false);
-                starterAssetsInputs.interact = false; // Сбрасываем флаг взаимодействия
+                // starterAssetsInputs.interact = false; // Сбрасываем флаг взаимодействия
                 _canInteract = false; // Запрещаем дальнейшее взаимодействие
             }
         }
@@ -147,12 +146,12 @@ namespace Core.Gameplay.PlayerScripts
                 _gameScreenView.interactTipView.gameObject.SetActive(true);
 
                 // Взаимодействие с предметом
-                if (starterAssetsInputs.interact)
-                {
-                    _playerItemManager.GrabItem(_currentItem);
-                    starterAssetsInputs.interact = false;
-                    _currentItem = null; // Убираем текущий предмет
-                }
+                // if (starterAssetsInputs.interact)
+                // {
+                //     _playerItemManager.GrabItem(_currentItem);
+                //     // starterAssetsInputs.interact = false;
+                //     _currentItem = null; // Убираем текущий предмет
+                // }
             }
             else
             {

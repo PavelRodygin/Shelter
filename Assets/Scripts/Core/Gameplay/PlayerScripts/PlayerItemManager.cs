@@ -38,11 +38,11 @@ namespace Core.Gameplay.PlayerScripts
         private void Update()
         {
             // Проверяем ввод на выброс предмета
-            if (_starterAssetsInputs.dropItem)
-            {
-                ThrowItem();
-                _starterAssetsInputs.dropItem = false; // Сбрасываем состояние ввода
-            }
+            // if (_starterAssetsInputs.dropItem)
+            // {
+            //     ThrowItem();
+            //     _starterAssetsInputs.dropItem = false; // Сбрасываем состояние ввода
+            // }
         }
 
         public void GrabItem(IItem item)
